@@ -224,11 +224,26 @@
   .trow .open{flex-shrink:0;font-family:Calibri,'Noto Sans TC','Segoe UI',sans-serif;font-size:11px;background:var(--accent);color:#fff;border:none;padding:6px 11px;border-radius:7px;cursor:pointer;text-decoration:none;white-space:nowrap}
   .trow .open.off{background:var(--line);color:var(--ink-soft);pointer-events:none}
 
+  /* ---------- 上層分頁切換(查布料 / 以布種找織紋) ---------- */
+  .toptabs{display:flex;gap:0;border-bottom:0.5px solid var(--line);margin:18px 0 4px;padding:0}
+  .toptab{padding:11px 0;margin-right:28px;font-size:14px;color:var(--ink-soft);cursor:pointer;border-bottom:2px solid transparent;transition:.12s;display:flex;align-items:center;gap:8px}
+  .toptab:hover{color:var(--ink)}
+  .toptab.active{color:var(--ink);border-bottom-color:var(--ink);font-weight:500}
+  .toptab .n{font-family:Calibri,'Noto Sans TC','Segoe UI',sans-serif;font-size:11px;color:var(--ink-soft);background:var(--paper);padding:2px 7px;border-radius:20px}
+  .toptab.active .n{background:var(--accent-soft);color:var(--accent)}
+
   /* ---------- 以布種找織紋頁 ---------- */
   .gnote{font-size:13px;color:var(--ink-soft);padding:18px 0 18px}
   .gnote b{color:var(--ink);font-weight:600}
   .gback{cursor:pointer;color:var(--accent);font-weight:500}
   .gback:hover{text-decoration:underline}
+  /* 搜尋布種 */
+  .gsearch{position:relative;max-width:420px;margin:0 0 20px}
+  .gsearch input{width:100%;font-family:Calibri,'Noto Sans TC','Segoe UI',sans-serif;font-size:14px;padding:11px 38px 11px 38px;border:1px solid var(--line);border-radius:9px;background:var(--card);outline:none}
+  .gsearch input:focus{border-color:var(--accent)}
+  .gsearch svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.4}
+  .gqclear{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--ink-soft);font-size:18px;padding:0 4px}
+  .gqclear:hover{color:var(--ink)}
   /* 第一階:布種大入口 */
   .gentries{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;padding-bottom:60px}
   .gentry{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;transition:.15s;text-align:center}
@@ -248,6 +263,7 @@
   .gcard .gtop b{font-weight:700;color:var(--ink)}
   .gcard .ggsm{font-family:Calibri,'Noto Sans TC','Segoe UI',sans-serif;font-size:13px;color:var(--ink)}
   .gcard .gcomp{font-size:11px;color:var(--ink-soft);margin-top:3px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .gcard .gsw{font-family:Calibri,'Noto Sans TC','Segoe UI',sans-serif;font-size:10.5px;color:var(--accent);margin-top:6px;padding-top:6px;border-top:0.5px solid var(--line-soft);letter-spacing:.02em}
 
   .embed-note{font-size:13px;color:var(--ink-soft);padding:16px 0 12px}
   .embed-box{padding-bottom:50px}
@@ -264,15 +280,9 @@
     <div class="home-grid">
       <div class="home-card" onclick="go('fabric')">
         <div class="hc-icon"><i class="ti ti-search"></i></div>
-        <div class="hc-name">布料查詢</div>
-        <div class="hc-desc">跨品牌數位布料庫 · 找代用布、比規格</div>
+        <div class="hc-name">全品牌布料查詢</div>
+        <div class="hc-desc">跨品牌數位布料庫 · 找代用布、看織紋光譜</div>
         <div class="hc-stat" id="hcFabric">—</div>
-      </div>
-      <div class="home-card" onclick="go('gallery')">
-        <div class="hc-icon"><i class="ti ti-layout-grid"></i></div>
-        <div class="hc-name">以布種找織紋</div>
-        <div class="hc-desc">依布種看織紋光譜 · 點布種看該類所有織紋</div>
-        <div class="hc-stat" id="hcGallery">—</div>
       </div>
       <div class="home-card" onclick="go('tgt')">
         <div class="hc-icon"><i class="ti ti-checklist"></i></div>
@@ -304,38 +314,32 @@
   </div>
 </div>
 
-<div id="page-gallery" class="page hidden">
-  <header>
-    <h1>以布種找織紋 <span class="zh">· Browse by Fabric Type</span></h1>
-    <span class="tagline">依布種瀏覽織紋光譜</span>
-    <nav class="hub-nav"><button onclick="go('home')">← 首頁</button></nav>
-  </header>
-  <div class="wrap">
-    <div class="gnote" id="gNote"></div>
-    <div class="gfabs" id="gFabs"></div>
-    <div class="ggrid" id="gGrid"></div>
-    <div class="empty hidden" id="gEmpty">這個布種目前還沒收圖</div>
-  </div>
-</div>
-
 <div id="page-fabric" class="page hidden">
 <header>
-  <h1>FABRIC FINDER <span class="zh">· 布料查詢</span></h1>
+  <h1>FABRIC FINDER <span class="zh">· 全品牌布料查詢</span></h1>
   <span class="tagline">跨品牌數位布料 · 單一來源</span>
   <nav class="hub-nav"><button onclick="go('home')">← 首頁</button></nav>
 </header>
 
 <div class="wrap">
-  <div class="toolbar">
-    <div class="search">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      <input id="q" type="text" placeholder="搜尋布號 / 供應商 / 成分 / 織紋…">
-    </div>
-    <div class="view-toggle">
-      <button id="btnList" class="active" onclick="setView('list')">布料查詢</button>
-      <button id="btnGrid" onclick="setView('grid')">全部資訊</button>
-    </div>
+  <!-- 上層分頁:查布料 / 以布種找織紋 -->
+  <div class="toptabs">
+    <div class="toptab active" id="ttFabric" onclick="setTopTab('fabric')">查布料 <span class="n" id="ttFabricN">—</span></div>
+    <div class="toptab" id="ttGallery" onclick="setTopTab('gallery')">以布種找織紋 <span class="n" id="ttGalleryN">—</span></div>
   </div>
+
+  <!-- 子分頁一:查布料(列表/全部資訊) -->
+  <div id="tab-fabric">
+    <div class="toolbar">
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="q" type="text" placeholder="搜尋布號 / 供應商 / 成分 / 織紋…">
+      </div>
+      <div class="view-toggle">
+        <button id="btnList" class="active" onclick="setView('list')">列表</button>
+        <button id="btnGrid" onclick="setView('grid')">全部資訊</button>
+      </div>
+    </div>
 
   <div class="filters">
     <div class="f-group"><label>① 品牌 Brand</label>
@@ -365,6 +369,15 @@
   <div id="gallery" class="gallery hidden"></div>
   <div id="grid" class="grid-wrap hidden"></div>
   <div id="empty" class="empty hidden">找不到符合條件的布料 · 試試放寬篩選</div>
+  </div><!-- /tab-fabric -->
+
+  <!-- 子分頁二:以布種找織紋 -->
+  <div id="tab-gallery" class="hidden">
+    <div class="gnote" id="gNote"></div>
+    <div id="gSearchBox"></div>
+    <div class="ggrid" id="gGrid"></div>
+    <div class="empty hidden" id="gEmpty">這個布種目前還沒收圖</div>
+  </div>
 </div>
 </div>
 
@@ -550,7 +563,7 @@
   "gsm": 166,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -628,7 +641,7 @@
   "gsm": 230,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Pointelle",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -680,7 +693,7 @@
   "gsm": 185,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Pointelle",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -992,7 +1005,7 @@
   "gsm": 95,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -1278,7 +1291,7 @@
   "gsm": 120,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -2292,7 +2305,7 @@
   "gsm": 250,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Ottoman",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -2701,6 +2714,36 @@
   "updated": "2025-01-06"
  },
  {
+  "code": "MK-DONE-CT4808_Tape",
+  "article": "Tape",
+  "mill": "MK自測",
+  "composition": "100Polyester",
+  "gsm": 1,
+  "width": null,
+  "category": "Knit",
+  "fabrication": "其他",
+  "finish": "無",
+  "chemFinish": "",
+  "mechFinish": "",
+  "scanSW": "Vizoo",
+  "testSW": "BW",
+  "brands": [
+   "Dicks Sporting Goods",
+   "Portal M",
+   "tgt",
+   "Gap Inc.",
+   "Kohls"
+  ],
+  "source": "Makalot 自製",
+  "image": "",
+  "digitized": "已數位化",
+  "fileLink": "",
+  "issue": "無",
+  "issueDesc": "",
+  "owner": "Rock Chu 朱英石",
+  "updated": "2025-05-13"
+ },
+ {
   "code": "MK-DONE-D1812779B28",
   "article": "Jacquard",
   "mill": "MK自測",
@@ -2786,18 +2829,14 @@
   "gsm": 1,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
   "scanSW": "Vizoo",
   "testSW": "CLO",
   "brands": [
-   "Gap Inc.",
-   "Dicks Sporting Goods",
-   "Portal M",
-   "tgt",
-   "Kohls"
+   "Gap Inc."
   ],
   "source": "Makalot 自製",
   "image": "",
@@ -3624,7 +3663,7 @@
   "gsm": 160,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -3676,7 +3715,7 @@
   "gsm": 185,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Crinkle",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -3686,7 +3725,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-DM2412B281078.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -3702,7 +3741,7 @@
   "gsm": 185,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Crinkle",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -3712,7 +3751,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-DM2412B281078.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -3910,7 +3949,7 @@
   "gsm": 270,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Chenille",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -4645,7 +4684,7 @@
   "gsm": 154,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -4671,7 +4710,7 @@
   "gsm": 150,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -4723,7 +4762,7 @@
   "gsm": 190,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -4759,7 +4798,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-069L7.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -4785,7 +4824,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-08Z8R.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -4811,7 +4850,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-0L759.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -4837,7 +4876,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-0LPMW.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -4863,7 +4902,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-0X116.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -4915,7 +4954,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-11W68.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -4941,7 +4980,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-15EZ9.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -4967,7 +5006,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-26G18.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5045,7 +5084,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-2ZXE6.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5071,7 +5110,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-35PP7.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5087,7 +5126,7 @@
   "gsm": 170,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Pointelle",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -5097,7 +5136,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-36391.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5113,7 +5152,7 @@
   "gsm": 180,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -5123,7 +5162,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-3L7YY.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5149,7 +5188,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-41128.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5175,7 +5214,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-41GKZ.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5201,7 +5240,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-44EE2.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5227,7 +5266,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-584XX.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5253,7 +5292,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-5ZL58.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5305,7 +5344,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-66M28.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5331,7 +5370,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-66ZEL.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5399,7 +5438,7 @@
   "gsm": 158,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -5409,7 +5448,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-897P3.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5435,7 +5474,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-9237Z.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5461,7 +5500,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-E429K.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5487,7 +5526,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-E44KP.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5513,7 +5552,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-E47X7.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5539,7 +5578,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-EYZWY.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5565,7 +5604,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-G3EE8.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5591,7 +5630,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-G3KR9.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5617,7 +5656,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-G4KP3.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5643,7 +5682,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-G976W.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5669,7 +5708,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-KYL25.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5695,7 +5734,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-L2WK4S.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5721,7 +5760,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-L2WZ4.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5747,7 +5786,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-L2X4Z.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5799,7 +5838,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-MMXPM.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5825,7 +5864,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-P49G2.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5851,7 +5890,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-PZL23.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5877,7 +5916,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-PZL23.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5929,7 +5968,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-W464L.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -5981,7 +6020,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-X0KX5.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6007,7 +6046,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-X0Z98.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6033,7 +6072,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-X0ZZL.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6059,7 +6098,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-XGY3X.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6085,7 +6124,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-XMXRP.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6111,7 +6150,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-XPW9G.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6137,7 +6176,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-Y118Y.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6163,7 +6202,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-YP6PW.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6189,7 +6228,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-YR06X.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6215,7 +6254,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-YW751.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6241,7 +6280,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-YWPZ4.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6267,7 +6306,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-Z74X3.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6293,7 +6332,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-ZR4E7.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6319,7 +6358,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-ZXWXY.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6345,7 +6384,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FAS-ZZYLX.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6371,7 +6410,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FASL5YG7.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6397,7 +6436,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FASP66Y9.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6423,7 +6462,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-DONE-FASXML3K.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -6465,7 +6504,7 @@
   "gsm": 210,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -7011,7 +7050,7 @@
   "gsm": 135,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -7245,7 +7284,7 @@
   "gsm": 183,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -7454,7 +7493,7 @@
   "gsm": 250,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Ottoman",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -7870,7 +7909,7 @@
   "gsm": 250,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Ottoman",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -8677,7 +8716,7 @@
   "gsm": 240,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -8703,7 +8742,7 @@
   "gsm": 240,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -8807,7 +8846,7 @@
   "gsm": 190,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Pointelle",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -9041,7 +9080,7 @@
   "gsm": 250,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Leather",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -9197,7 +9236,7 @@
   "gsm": 173,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -10968,7 +11007,7 @@
   "gsm": 215,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -11878,7 +11917,7 @@
   "gsm": 225,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Chenille",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -11956,7 +11995,7 @@
   "gsm": 190,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Ottoman",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -12268,7 +12307,7 @@
   "gsm": 300,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Ottoman",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -12399,7 +12438,7 @@
   "gsm": 190,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Chenille",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -12555,7 +12594,7 @@
   "gsm": 210,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Ottoman",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -12789,7 +12828,7 @@
   "gsm": 245,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Ottoman",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -12867,7 +12906,7 @@
   "gsm": 220,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -13023,7 +13062,7 @@
   "gsm": 275,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Crinkle",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -14011,7 +14050,7 @@
   "gsm": 115,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Pointelle",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -14194,7 +14233,7 @@
   "gsm": 134,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -14480,7 +14519,7 @@
   "gsm": 200,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -14793,7 +14832,7 @@
   "gsm": 230,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -15677,7 +15716,7 @@
   "gsm": 250,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -16910,7 +16949,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-009E.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -17056,7 +17095,7 @@
   "gsm": 245,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Pointelle",
   "finish": "兩者",
   "chemFinish": "Softener",
   "mechFinish": "Brushed Face",
@@ -17446,7 +17485,7 @@
   "gsm": 196,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "化學整理",
   "chemFinish": "Water Repellant",
   "mechFinish": "",
@@ -17550,7 +17589,7 @@
   "gsm": 149,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -17664,7 +17703,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-0XY5Y.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -17690,7 +17729,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-0ZKG.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -17742,7 +17781,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-103P.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -18148,7 +18187,7 @@
   "gsm": 225,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "化學整理",
   "chemFinish": "Water Repellant Durable",
   "mechFinish": "",
@@ -18382,7 +18421,7 @@
   "gsm": 40,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "兩者",
   "chemFinish": "Coated Acrylic",
   "mechFinish": "Cire Back",
@@ -18512,7 +18551,7 @@
   "gsm": 80,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "化學整理",
   "chemFinish": "Water Repellant Durable",
   "mechFinish": "",
@@ -18678,7 +18717,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-2LRX7.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -18798,7 +18837,7 @@
   "gsm": 250,
   "width": 60,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "兩者",
   "chemFinish": "Softener",
   "mechFinish": "Tumble",
@@ -18938,7 +18977,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-2R8K.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -18964,7 +19003,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-2W1M.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -19136,7 +19175,7 @@
   "gsm": 89,
   "width": 57,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "化學整理",
   "chemFinish": "Softener",
   "mechFinish": "",
@@ -19432,7 +19471,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-356ME.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -19562,7 +19601,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-3642K.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -19656,7 +19695,7 @@
   "gsm": 120,
   "width": 55,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "兩者",
   "chemFinish": "Softener",
   "mechFinish": "Crinkle",
@@ -19848,7 +19887,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-3G47.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -19968,7 +20007,7 @@
   "gsm": 172,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "兩者",
   "chemFinish": "Water Repellant Durable",
   "mechFinish": "Brushed Back",
@@ -20082,7 +20121,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-3LWER.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -20186,7 +20225,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-3RL7.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -20722,7 +20761,7 @@
   "gsm": 400,
   "width": 63,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "兩者",
   "chemFinish": "Softener",
   "mechFinish": "Brushed Face",
@@ -20966,7 +21005,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-48RK0.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -21580,7 +21619,7 @@
   "gsm": 220,
   "width": 54,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -21902,7 +21941,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-5GX0P.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -21970,7 +22009,7 @@
   "gsm": 41,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "兩者",
   "chemFinish": "Water Repellant Durable",
   "mechFinish": "Cire Face",
@@ -22152,7 +22191,7 @@
   "gsm": 250,
   "width": 60,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "兩者",
   "chemFinish": "Softener",
   "mechFinish": "Tumble",
@@ -22490,7 +22529,7 @@
   "gsm": 153,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Ottoman",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -22802,7 +22841,7 @@
   "gsm": 310,
   "width": 60,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Brushed Back",
@@ -23764,7 +23803,7 @@
   "gsm": 57,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -23868,7 +23907,7 @@
   "gsm": 140,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "化學整理",
   "chemFinish": "Wicking",
   "mechFinish": "",
@@ -23878,7 +23917,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-7PE7W.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -24102,7 +24141,7 @@
   "gsm": 135,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -24138,7 +24177,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-89E0.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -24190,7 +24229,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-8G1R.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -24840,7 +24879,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-95EZY.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -25594,7 +25633,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-EG0E0.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -25802,7 +25841,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-ELZE.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -25932,7 +25971,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-G203P.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -25984,7 +26023,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-G234R.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -26088,7 +26127,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-G2G99.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -26156,7 +26195,7 @@
   "gsm": 59,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -26910,7 +26949,7 @@
   "gsm": 37,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "兩者",
   "chemFinish": "Water Repellant Durable",
   "mechFinish": "Cire Back",
@@ -27050,7 +27089,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-GZ73.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -27076,7 +27115,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-J1P3.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -27128,7 +27167,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-J4W2.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -27154,7 +27193,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-JL7Z.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -27180,7 +27219,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-JMWE.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -27248,7 +27287,7 @@
   "gsm": 230,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "兩者",
   "chemFinish": "Water Repellant",
   "mechFinish": "Brushed Back",
@@ -27440,7 +27479,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-K85Z.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -27596,7 +27635,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-KG7P.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -27794,7 +27833,7 @@
   "gsm": 70,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "化學整理",
   "chemFinish": "Coated PU",
   "mechFinish": "Cire Back",
@@ -27872,7 +27911,7 @@
   "gsm": 77,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "化學整理",
   "chemFinish": "Water Repellant Durable",
   "mechFinish": "",
@@ -28028,7 +28067,7 @@
   "gsm": 66,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "兩者",
   "chemFinish": "Water Repellant Durable",
   "mechFinish": "Cire Back",
@@ -28090,7 +28129,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-L047Y.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -28366,7 +28405,7 @@
   "gsm": 290,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "兩者",
   "chemFinish": "Softener",
   "mechFinish": "Brushed Back",
@@ -28522,7 +28561,7 @@
   "gsm": 120,
   "width": 58,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "化學整理",
   "chemFinish": "Softener",
   "mechFinish": "",
@@ -28548,7 +28587,7 @@
   "gsm": 210,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "化學整理",
   "chemFinish": "Wicking",
   "mechFinish": "",
@@ -28808,7 +28847,7 @@
   "gsm": 215,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "兩者",
   "chemFinish": "Water Repellant Durable",
   "mechFinish": "Brushed Back",
@@ -28948,7 +28987,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-LR7ZZ.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -29042,7 +29081,7 @@
   "gsm": 203,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -29078,7 +29117,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-M5X4.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -29182,7 +29221,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-M8Y6R.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -29286,7 +29325,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-M9W2.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -29364,7 +29403,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-MEYK.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -29744,7 +29783,7 @@
   "gsm": 88,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "兩者",
   "chemFinish": "Water Repellant",
   "mechFinish": "Cire Back",
@@ -29754,7 +29793,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-NEP3.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -29796,7 +29835,7 @@
   "gsm": 135,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "化學整理",
   "chemFinish": "Quick Dry",
   "mechFinish": "",
@@ -30238,7 +30277,7 @@
   "gsm": 345,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -31054,7 +31093,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-R1Y0E.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -31548,7 +31587,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-W2Y2.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -31668,7 +31707,7 @@
   "gsm": 72,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -31860,7 +31899,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-W9G2.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -31886,7 +31925,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-W9L2.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -31938,7 +31977,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-WG1W.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -32848,7 +32887,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-XM7ZG.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -33862,7 +33901,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-Z2KER.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -34148,7 +34187,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-Z93W2.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -34252,7 +34291,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-ZM75.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -34278,7 +34317,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-FAS-FAS-ZMY3.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -34398,7 +34437,7 @@
   "gsm": 298,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Peached/Sueded Face",
@@ -34476,7 +34515,7 @@
   "gsm": 63,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "兩者",
   "chemFinish": "Water Repellant Durable",
   "mechFinish": "Wash/Tumble",
@@ -34814,7 +34853,7 @@
   "gsm": 5,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Crinkled",
@@ -35022,7 +35061,7 @@
   "gsm": 6,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "化學整理",
   "chemFinish": "Durable Water Repellent (C0 / non-PFC)",
   "mechFinish": "",
@@ -35048,7 +35087,7 @@
   "gsm": 8,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "兩者",
   "chemFinish": "Preshrunk",
   "mechFinish": "Peach",
@@ -35230,7 +35269,7 @@
   "gsm": 6,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "化學整理",
   "chemFinish": "Durable Water Repellent (C0 / non-PFC)",
   "mechFinish": "",
@@ -35256,7 +35295,7 @@
   "gsm": 6,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "化學整理",
   "chemFinish": "Durable Water Repellent (C0 / non-PFC)",
   "mechFinish": "",
@@ -35308,7 +35347,7 @@
   "gsm": 5,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -35646,7 +35685,7 @@
   "gsm": 58,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -36713,7 +36752,7 @@
   "gsm": 295,
   "width": 58,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -36791,7 +36830,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Normal",
@@ -38013,7 +38052,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "兩者",
   "chemFinish": "Mercerized, Preshrunk",
   "mechFinish": "Normal",
@@ -39287,7 +39326,7 @@
   "gsm": 157,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -39911,7 +39950,7 @@
   "gsm": 7,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "兩者",
   "chemFinish": "Softener",
   "mechFinish": "Normal",
@@ -40171,7 +40210,7 @@
   "gsm": 13,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "兩者",
   "chemFinish": "Other: See Comments",
   "mechFinish": "Both Side Brushed",
@@ -41212,7 +41251,7 @@
   "gsm": 84,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "化學整理",
   "chemFinish": "PU Coating, Durable Water Repellent (C0 / non-PFC)",
   "mechFinish": "",
@@ -43214,7 +43253,7 @@
   "gsm": 230,
   "width": 58,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -43240,7 +43279,7 @@
   "gsm": 255,
   "width": 59,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -43396,7 +43435,7 @@
   "gsm": 215,
   "width": 58,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -43500,7 +43539,7 @@
   "gsm": 210,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crinkle",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -43734,7 +43773,7 @@
   "gsm": 240,
   "width": 66,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -43786,7 +43825,7 @@
   "gsm": 201,
   "width": 58,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -43890,7 +43929,7 @@
   "gsm": 220,
   "width": 58,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -44124,7 +44163,7 @@
   "gsm": 300,
   "width": 67,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -44514,7 +44553,7 @@
   "gsm": 240,
   "width": 72,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -44644,7 +44683,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -44852,7 +44891,7 @@
   "gsm": 250,
   "width": 67,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -44904,7 +44943,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -46126,7 +46165,7 @@
   "gsm": 238,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "化學整理",
   "chemFinish": "Durable Water Repellent (C0 / non-PFC)",
   "mechFinish": "",
@@ -48467,7 +48506,7 @@
   "gsm": 290,
   "width": 53,
   "category": "Knit",
-  "fabrication": "",
+  "fabrication": "Faux Leather",
   "finish": "化學整理",
   "chemFinish": "PU Coating",
   "mechFinish": "",
@@ -48623,7 +48662,7 @@
   "gsm": 152,
   "width": null,
   "category": "Woven",
-  "fabrication": "",
+  "fabrication": "Herringbone",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Normal",
@@ -49065,7 +49104,7 @@
   "gsm": 195,
   "width": 63,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Both Side Brushed",
@@ -49845,7 +49884,7 @@
   "gsm": 600,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -49952,7 +49991,7 @@
   "fabrication": "其他",
   "finish": "化學整理",
   "chemFinish": "Wicking",
-  "mechFinish": "Normal",
+  "mechFinish": "",
   "scanSW": "",
   "testSW": "",
   "brands": [
@@ -50703,7 +50742,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crinkle",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -51093,7 +51132,7 @@
   "gsm": 9,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -51145,7 +51184,7 @@
   "gsm": 5,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Peach",
@@ -51483,7 +51522,7 @@
   "gsm": 5,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "兩者",
   "chemFinish": "Mercerized, Preshrunk",
   "mechFinish": "Normal",
@@ -54006,7 +54045,7 @@
   "gsm": 245,
   "width": 58,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -54241,7 +54280,7 @@
   "gsm": 280,
   "width": 55,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -54267,7 +54306,7 @@
   "gsm": 305,
   "width": 58,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -54657,7 +54696,7 @@
   "gsm": 5,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Both Side Brushed",
@@ -55047,7 +55086,7 @@
   "gsm": 360,
   "width": 59,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -55281,7 +55320,7 @@
   "gsm": 540,
   "width": 59,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -55697,7 +55736,7 @@
   "gsm": 3,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -55749,7 +55788,7 @@
   "gsm": 280,
   "width": 63,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -55931,7 +55970,7 @@
   "gsm": 9,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -56009,7 +56048,7 @@
   "gsm": 260,
   "width": 61,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -56035,7 +56074,7 @@
   "gsm": 700,
   "width": 58,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -56061,7 +56100,7 @@
   "gsm": 195,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "化學整理",
   "chemFinish": "Quick Dry, Wicking",
   "mechFinish": "",
@@ -56113,7 +56152,7 @@
   "gsm": 200,
   "width": 64,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "兩者",
   "chemFinish": "Silicone Softener",
   "mechFinish": "Both Side Shear",
@@ -56139,7 +56178,7 @@
   "gsm": 220,
   "width": 61,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -56347,7 +56386,7 @@
   "gsm": 260,
   "width": 65,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -57127,7 +57166,7 @@
   "gsm": 375,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Normal",
@@ -57231,7 +57270,7 @@
   "gsm": 430,
   "width": 59,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "兩者",
   "chemFinish": "Other: See Comments",
   "mechFinish": "Other: See Comments",
@@ -57309,7 +57348,7 @@
   "gsm": 3,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -57985,7 +58024,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -58271,7 +58310,7 @@
   "gsm": 390,
   "width": 72,
   "category": "Knit",
-  "fabrication": "",
+  "fabrication": "Double Knit",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -58817,7 +58856,7 @@
   "gsm": 41,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "兩者",
   "chemFinish": "Durable Water Repellent (C0 / non-PFC)",
   "mechFinish": "Ciere",
@@ -58843,7 +58882,7 @@
   "gsm": 5,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -59597,7 +59636,7 @@
   "gsm": 5,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -60507,7 +60546,7 @@
   "gsm": 400,
   "width": 58,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "無",
   "chemFinish": "Silicone Softener",
   "mechFinish": "",
@@ -60871,7 +60910,7 @@
   "gsm": 190,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -62121,7 +62160,7 @@
   "gsm": 3,
   "width": null,
   "category": "Woven",
-  "fabrication": "",
+  "fabrication": "Crinkle",
   "finish": "兩者",
   "chemFinish": "Durable Water Repellent (C0 / non-PFC)",
   "mechFinish": "Crinkled",
@@ -62355,7 +62394,7 @@
   "gsm": 8,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -62433,7 +62472,7 @@
   "gsm": 8,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Normal",
@@ -63369,7 +63408,7 @@
   "gsm": 200,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Normal",
@@ -64331,7 +64370,7 @@
   "gsm": 275,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Normal",
@@ -64461,7 +64500,7 @@
   "gsm": 8,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -64852,7 +64891,7 @@
   "gsm": 8,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Normal",
@@ -65944,7 +65983,7 @@
   "gsm": 490,
   "width": 57,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -66100,7 +66139,7 @@
   "gsm": 240,
   "width": 59,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -66126,7 +66165,7 @@
   "gsm": 245,
   "width": 58,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -67010,7 +67049,7 @@
   "gsm": 400,
   "width": 58,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "化學整理",
   "chemFinish": "Silicone Softener",
   "mechFinish": "",
@@ -68674,7 +68713,7 @@
   "gsm": 2,
   "width": null,
   "category": "Woven",
-  "fabrication": "",
+  "fabrication": "Crinkle",
   "finish": "化學整理",
   "chemFinish": "Other: See Comments, Durable Water Repellent (C0 / non-PFC)",
   "mechFinish": "",
@@ -70286,7 +70325,7 @@
   "gsm": 320,
   "width": 56,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Normal",
@@ -70832,7 +70871,7 @@
   "gsm": 260,
   "width": 53,
   "category": "Knit",
-  "fabrication": "",
+  "fabrication": "Faux Leather",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -72574,7 +72613,7 @@
   "gsm": 80,
   "width": null,
   "category": "Woven",
-  "fabrication": "",
+  "fabrication": "Crinkle",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -73824,7 +73863,7 @@
   "gsm": 178,
   "width": 57,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "化學整理",
   "chemFinish": "Burnout",
   "mechFinish": "",
@@ -73902,7 +73941,7 @@
   "gsm": 265,
   "width": 59,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -73954,7 +73993,7 @@
   "gsm": 120,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -73980,7 +74019,7 @@
   "gsm": 169,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -74552,7 +74591,7 @@
   "gsm": 135,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -75125,7 +75164,7 @@
   "gsm": 480,
   "width": 56,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Brushed Face",
@@ -75645,7 +75684,7 @@
   "gsm": 145,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -76035,7 +76074,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "",
+  "fabrication": "Crinkle",
   "finish": "兩者",
   "chemFinish": "Mercerized, Preshrunk",
   "mechFinish": "Crinkled",
@@ -76061,7 +76100,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "",
+  "fabrication": "Crinkle",
   "finish": "兩者",
   "chemFinish": "Mercerized, Preshrunk",
   "mechFinish": "Crinkled",
@@ -76087,7 +76126,7 @@
   "gsm": 5,
   "width": null,
   "category": "Woven",
-  "fabrication": "",
+  "fabrication": "Crinkle",
   "finish": "兩者",
   "chemFinish": "Mercerized, Preshrunk",
   "mechFinish": "Crinkled",
@@ -76269,7 +76308,7 @@
   "gsm": 103,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Crinkled",
@@ -76503,7 +76542,7 @@
   "gsm": 6,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -76529,7 +76568,7 @@
   "gsm": 265,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Normal",
@@ -76919,7 +76958,7 @@
   "gsm": 3,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Normal",
@@ -77231,7 +77270,7 @@
   "gsm": 10,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Peach",
@@ -77361,7 +77400,7 @@
   "gsm": 95,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crinkle",
   "finish": "兩者",
   "chemFinish": "Fabric Wash",
   "mechFinish": "Normal",
@@ -77543,7 +77582,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -78246,7 +78285,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Crinkled",
@@ -79130,7 +79169,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -79156,7 +79195,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -80378,7 +80417,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -80404,7 +80443,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -81418,7 +81457,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -81444,7 +81483,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -83342,7 +83381,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -83550,7 +83589,7 @@
   "gsm": 350,
   "width": 57,
   "category": "Knit",
-  "fabrication": "",
+  "fabrication": "Double Knit",
   "finish": "化學整理",
   "chemFinish": "Quick Dry, Wicking",
   "mechFinish": "",
@@ -84902,7 +84941,7 @@
   "gsm": 6,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Normal",
@@ -85267,7 +85306,7 @@
   "gsm": 3,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -86074,7 +86113,7 @@
   "gsm": 12,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -86360,7 +86399,7 @@
   "gsm": 17,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -86438,7 +86477,7 @@
   "gsm": 13,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -86880,7 +86919,7 @@
   "gsm": 230,
   "width": 56,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Normal",
@@ -87140,7 +87179,7 @@
   "gsm": 14,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -88492,7 +88531,7 @@
   "gsm": 3,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -88518,7 +88557,7 @@
   "gsm": 285,
   "width": 63,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -88700,7 +88739,7 @@
   "gsm": 220,
   "width": 59,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -90000,7 +90039,7 @@
   "gsm": 7,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Normal",
@@ -90676,7 +90715,7 @@
   "gsm": 210,
   "width": 78,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -93146,7 +93185,7 @@
   "gsm": 190,
   "width": 147,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "兩者",
   "chemFinish": "TBD",
   "mechFinish": "TBD",
@@ -95176,7 +95215,7 @@
   "gsm": 16,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Sandwashed",
@@ -95384,7 +95423,7 @@
   "gsm": 3,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crinkle",
   "finish": "兩者",
   "chemFinish": "TBD",
   "mechFinish": "Normal",
@@ -96138,7 +96177,7 @@
   "gsm": 238,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "化學整理",
   "chemFinish": "Durable Water Repellent (C0 / non-PFC)",
   "mechFinish": "",
@@ -96918,7 +96957,7 @@
   "gsm": 220,
   "width": 60,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "兩者",
   "chemFinish": "TBD",
   "mechFinish": "TBD",
@@ -97048,7 +97087,7 @@
   "gsm": 400,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -97490,7 +97529,7 @@
   "gsm": 145,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "化學整理",
   "chemFinish": "Softener",
   "mechFinish": "",
@@ -98166,7 +98205,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crinkle",
   "finish": "兩者",
   "chemFinish": "Mercerized, Preshrunk",
   "mechFinish": "Crinkled",
@@ -98296,7 +98335,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crinkle",
   "finish": "兩者",
   "chemFinish": "Mercerized, Preshrunk",
   "mechFinish": "Crinkled",
@@ -98374,7 +98413,7 @@
   "gsm": 200,
   "width": 48,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Pointelle",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -98738,7 +98777,7 @@
   "gsm": 165,
   "width": 58,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -101417,7 +101456,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Crinkled",
@@ -102379,7 +102418,7 @@
   "gsm": 200,
   "width": 150,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "兩者",
   "chemFinish": "TBD",
   "mechFinish": "TBD",
@@ -102461,6 +102500,32 @@
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "TBD",
+  "scanSW": "",
+  "testSW": "",
+  "brands": [
+   "Athleta"
+  ],
+  "source": "Makalot 自製",
+  "image": "",
+  "digitized": "已數位化",
+  "fileLink": "",
+  "issue": "無",
+  "issueDesc": "",
+  "owner": "",
+  "updated": ""
+ },
+ {
+  "code": "MK-GAP-280251",
+  "article": "ULTIMATE Warp Knit Piece Dye ATH-UPF 40+ Absorbency Breathability Quick Dry",
+  "mill": "",
+  "composition": "73% Nylon Conventional, 27% Elastane Conventional Spandex",
+  "gsm": 120,
+  "width": 58,
+  "category": "Knit",
+  "fabrication": "Velour",
+  "finish": "兩者",
+  "chemFinish": "Wicking",
+  "mechFinish": "Normal",
   "scanSW": "",
   "testSW": "",
   "brands": [
@@ -103991,7 +104056,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "兩者",
   "chemFinish": "Softener",
   "mechFinish": "Normal",
@@ -104668,7 +104733,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "機械整理",
   "chemFinish": "",
   "mechFinish": "Crinkled",
@@ -104850,7 +104915,7 @@
   "gsm": 235,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "兩者",
   "chemFinish": "TBD",
   "mechFinish": "TBD",
@@ -104980,7 +105045,7 @@
   "gsm": 250,
   "width": 50,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "兩者",
   "chemFinish": "Wicking",
   "mechFinish": "Normal",
@@ -105318,7 +105383,7 @@
   "gsm": 245,
   "width": 65,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Pointelle",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -105500,7 +105565,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "兩者",
   "chemFinish": "Softener",
   "mechFinish": "Crinkled",
@@ -105708,7 +105773,7 @@
   "gsm": 220,
   "width": 58,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "兩者",
   "chemFinish": "Softener",
   "mechFinish": "Normal",
@@ -106697,7 +106762,7 @@
   "gsm": 9,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "兩者",
   "chemFinish": "TBD",
   "mechFinish": "TBD",
@@ -106905,7 +106970,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crinkle",
   "finish": "兩者",
   "chemFinish": "Mercerized, Preshrunk",
   "mechFinish": "Crinkled",
@@ -106931,7 +106996,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crinkle",
   "finish": "兩者",
   "chemFinish": "Mercerized, Preshrunk",
   "mechFinish": "Crinkled",
@@ -106957,7 +107022,7 @@
   "gsm": 255,
   "width": 68,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "兩者",
   "chemFinish": "Wicking",
   "mechFinish": "Brush",
@@ -107009,7 +107074,7 @@
   "gsm": 235,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -107165,7 +107230,7 @@
   "gsm": 230,
   "width": 68,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "化學整理",
   "chemFinish": "Wicking",
   "mechFinish": "",
@@ -107243,7 +107308,7 @@
   "gsm": 5,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "兩者",
   "chemFinish": "PU Coating, Durable Water Repellent (C0 / non-PFC)",
   "mechFinish": "Brush",
@@ -108882,7 +108947,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -109038,7 +109103,7 @@
   "gsm": 325,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "兩者",
   "chemFinish": "TBD",
   "mechFinish": "TBD",
@@ -109558,7 +109623,7 @@
   "gsm": 155,
   "width": 55,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "兩者",
   "chemFinish": "Quick Dry, UPF, Wicking",
   "mechFinish": "Normal",
@@ -110026,7 +110091,7 @@
   "gsm": 235,
   "width": 66,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "兩者",
   "chemFinish": "TBD",
   "mechFinish": "TBD",
@@ -110104,7 +110169,7 @@
   "gsm": 300,
   "width": 54,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "兩者",
   "chemFinish": "TBD",
   "mechFinish": "Brush",
@@ -110780,7 +110845,7 @@
   "gsm": 8,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -111196,7 +111261,7 @@
   "gsm": 180,
   "width": 165,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "化學整理",
   "chemFinish": "TBD",
   "mechFinish": "",
@@ -111352,7 +111417,7 @@
   "gsm": 4,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "兩者",
   "chemFinish": "TBD",
   "mechFinish": "Normal",
@@ -111378,7 +111443,7 @@
   "gsm": 55,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Taffeta",
   "finish": "兩者",
   "chemFinish": "TBD",
   "mechFinish": "TBD",
@@ -111768,7 +111833,7 @@
   "gsm": 235,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -111830,7 +111895,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAB-7K1E.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -111846,7 +111911,7 @@
   "gsm": 150,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Crepe",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -111856,7 +111921,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAB-8Y873.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -111960,7 +112025,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAB-Z912.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112038,7 +112103,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-0023.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112064,7 +112129,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-00Z3.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112090,7 +112155,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-05Y4K.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112246,7 +112311,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-1ZXY3.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112272,7 +112337,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-2530.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112298,7 +112363,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-2K0R.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112324,7 +112389,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-2LW47.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112350,7 +112415,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-2MP8W.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112402,7 +112467,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-2ZX49.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112418,7 +112483,7 @@
   "gsm": 310,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -112454,7 +112519,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-3GR3.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112480,7 +112545,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-3GW7.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112532,7 +112597,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-3YWL.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112558,7 +112623,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-4439.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112584,7 +112649,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-4439.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112636,7 +112701,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-47LX5.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112662,7 +112727,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-4PLL.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112688,7 +112753,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-54W6Y.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112714,7 +112779,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-5GM4.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112766,7 +112831,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-7KLX.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112792,7 +112857,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-7KZX.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112844,7 +112909,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-87XR8.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112896,7 +112961,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-99YR.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -112912,7 +112977,7 @@
   "gsm": 230,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -112922,7 +112987,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-9KL6P.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113026,7 +113091,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-EL1Y.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113052,7 +113117,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-EL5MK.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113078,7 +113143,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-EL717.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113146,7 +113211,7 @@
   "gsm": 240,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Double Knit",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -113156,7 +113221,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-G713.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113182,7 +113247,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-G888.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113208,7 +113273,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-G888.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113234,7 +113299,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-G8W7.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113260,7 +113325,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-GMWZ.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113312,7 +113377,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-J2G4.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113338,7 +113403,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-JGM4.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113364,7 +113429,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-JL6E.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113390,7 +113455,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-JM70.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113442,7 +113507,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-K1PL.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113468,7 +113533,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-K832.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113484,7 +113549,7 @@
   "gsm": 240,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -113520,7 +113585,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-KL4Y7.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113546,7 +113611,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-KLL7X.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113572,7 +113637,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-KLXGL.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113624,7 +113689,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-L0262.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113676,7 +113741,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-LL07.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113702,7 +113767,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-LWYM.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113780,7 +113845,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-M940.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113858,7 +113923,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-N0M6.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113884,7 +113949,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-N7Z9.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113962,7 +114027,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-P54X.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -113988,7 +114053,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-P54X.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -114014,7 +114079,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-P64L1.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -114040,7 +114105,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-P64ME.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -114170,7 +114235,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-R6405.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -114196,7 +114261,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-RW07.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -114238,7 +114303,7 @@
   "gsm": 180,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -114248,7 +114313,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-RZ52.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -114378,7 +114443,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-X2EY6.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -114498,7 +114563,7 @@
   "gsm": 188,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Ottoman",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -114560,7 +114625,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-YXM5.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -114586,7 +114651,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-Z2R3M.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -114638,7 +114703,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-Z9YY.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -114654,7 +114719,7 @@
   "gsm": 158,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -114758,7 +114823,7 @@
   "gsm": 265,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -114768,7 +114833,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FR116913.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -114784,7 +114849,7 @@
   "gsm": 255,
   "width": null,
   "category": "Knit",
-  "fabrication": "其他",
+  "fabrication": "Chenille",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -114794,7 +114859,7 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FR41001.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -114820,7 +114885,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FR41001.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -115080,7 +115145,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-12E5.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -115096,7 +115161,7 @@
   "gsm": null,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Faux Leather",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -115106,7 +115171,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-35K8Y.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -115184,7 +115249,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-60ZK.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -115262,7 +115327,33 @@
    "tgt"
   ],
   "source": "Makalot 自製",
-  "image": "",
+  "image": "images/MK-TGT-FAS-GX98.jpg",
+  "digitized": "已數位化",
+  "fileLink": "",
+  "issue": "無",
+  "issueDesc": "",
+  "owner": "Yota",
+  "updated": ""
+ },
+ {
+  "code": "MK-TGT-FAS-J03K",
+  "article": "Gauze Doubleweave",
+  "mill": "Spark",
+  "composition": "100",
+  "gsm": null,
+  "width": null,
+  "category": "Woven",
+  "fabrication": "Double Weave",
+  "finish": "無",
+  "chemFinish": "",
+  "mechFinish": "",
+  "scanSW": "",
+  "testSW": "",
+  "brands": [
+   "tgt"
+  ],
+  "source": "客戶提供",
+  "image": "images/MK-TGT-FAS-J03K.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -115288,7 +115379,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-J31W.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -115340,7 +115431,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-M9R0.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -115366,7 +115457,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-N0YK.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -115392,7 +115483,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-N2XZ.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -115418,7 +115509,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-N918.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -115434,7 +115525,7 @@
   "gsm": null,
   "width": null,
   "category": "Woven",
-  "fabrication": "其他",
+  "fabrication": "Herringbone",
   "finish": "無",
   "chemFinish": "",
   "mechFinish": "",
@@ -115444,7 +115535,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-NKPM.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -115470,7 +115561,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-NME0.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -115574,7 +115665,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-X20P.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -115600,7 +115691,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-YR841.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -115626,7 +115717,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FAS-Z9RY.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -115652,7 +115743,7 @@
    "tgt"
   ],
   "source": "客戶提供",
-  "image": "",
+  "image": "images/MK-TGT-FR118844.jpg",
   "digitized": "已數位化",
   "fileLink": "",
   "issue": "無",
@@ -116651,6 +116742,141 @@
 ]</script>
 <script id="galleryData" type="application/json">[
  {
+  "code": "MK-DONE-DM2412B281078",
+  "image": "images/MK-DONE-DM2412B281078.jpg",
+  "fabrication": "Crinkle",
+  "category": "Knit",
+  "gsm": 185,
+  "composition": "96Recycled Polyester / 4Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Crinkle",
+  "scanSW": "",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-069L7",
+  "image": "images/MK-DONE-FAS-069L7.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 150,
+  "composition": "95Cotton / 5Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-08Z8R",
+  "image": "images/MK-DONE-FAS-08Z8R.jpg",
+  "fabrication": "Mesh",
+  "category": "Knit",
+  "gsm": 105,
+  "composition": "90Recycled Polyester / 10Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Mesh",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-0L759",
+  "image": "images/MK-DONE-FAS-0L759.jpg",
+  "fabrication": "Poplin",
+  "category": "Woven",
+  "gsm": 100,
+  "composition": "89Recycled Polyester / 11Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Poplin",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-0LPMW",
+  "image": "images/MK-DONE-FAS-0LPMW.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 108,
+  "composition": "88Recycled Polyester / 12Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-0X116",
+  "image": "images/MK-DONE-FAS-0X116.jpg",
+  "fabrication": "Mesh",
+  "category": "Knit",
+  "gsm": 145,
+  "composition": "94Recycled Polyester / 6Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Mesh",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-11W68",
+  "image": "images/MK-DONE-FAS-11W68.jpg",
+  "fabrication": "Poplin",
+  "category": "Woven",
+  "gsm": 120,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Poplin",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-15EZ9",
+  "image": "images/MK-DONE-FAS-15EZ9.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 170,
+  "composition": "93Polyester / 7Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Rib",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-26G18",
+  "image": "images/MK-DONE-FAS-26G18.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 190,
+  "composition": "92Rayon / 8Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
   "code": "MK-DONE-FAS-2M19W",
   "image": "images/MK-DONE-FAS-2M19W.jpg",
   "fabrication": "Jersey",
@@ -116661,7 +116887,174 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jersey"
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-2ZXE6",
+  "image": "images/MK-DONE-FAS-2ZXE6.jpg",
+  "fabrication": "Dobby",
+  "category": "Woven",
+  "gsm": 186,
+  "composition": "86Recycled Polyester / 14Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Dobby",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-35PP7",
+  "image": "images/MK-DONE-FAS-35PP7.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 190,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-36391",
+  "image": "images/MK-DONE-FAS-36391.jpg",
+  "fabrication": "Pointelle",
+  "category": "Knit",
+  "gsm": 170,
+  "composition": "100Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Pointelle",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-3L7YY",
+  "image": "images/MK-DONE-FAS-3L7YY.jpg",
+  "fabrication": "Velour",
+  "category": "Knit",
+  "gsm": 180,
+  "composition": "94Recycled Polyester / 6Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Velour",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-41128",
+  "image": "images/MK-DONE-FAS-41128.jpg",
+  "fabrication": "Mesh",
+  "category": "Knit",
+  "gsm": 130,
+  "composition": "92Recycled Polyester / 8Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Mesh",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-41GKZ",
+  "image": "images/MK-DONE-FAS-41GKZ.jpg",
+  "fabrication": "Tricot",
+  "category": "Woven",
+  "gsm": 150,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Tricot",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-44EE2",
+  "image": "images/MK-DONE-FAS-44EE2.jpg",
+  "fabrication": "Poplin",
+  "category": "Woven",
+  "gsm": 2,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Poplin",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-584XX",
+  "image": "images/MK-DONE-FAS-584XX.jpg",
+  "fabrication": "Dobby",
+  "category": "Woven",
+  "gsm": 95,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Dobby",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-5ZL58",
+  "image": "images/MK-DONE-FAS-5ZL58.jpg",
+  "fabrication": "Twill",
+  "category": "Woven",
+  "gsm": 163,
+  "composition": "92Nylon / 8Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Twill",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-66M28",
+  "image": "images/MK-DONE-FAS-66M28.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 200,
+  "composition": "94Recycled Polyester / 6Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-66ZEL",
+  "image": "images/MK-DONE-FAS-66ZEL.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 155,
+  "composition": "100Cotton(BCI)",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Pointelle Rib",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
  },
  {
   "code": "MK-DONE-FAS-6P149",
@@ -116674,7 +117067,219 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jersey"
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-897P3",
+  "image": "images/MK-DONE-FAS-897P3.jpg",
+  "fabrication": "Crepe",
+  "category": "Knit",
+  "gsm": 158,
+  "composition": "50Recycled Polyester / 50T400",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Crepe",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-9237Z",
+  "image": "images/MK-DONE-FAS-9237Z.jpg",
+  "fabrication": "Seersucker",
+  "category": "Woven",
+  "gsm": 83,
+  "composition": "70Elastane / 30Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Seersucker",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-E429K",
+  "image": "images/MK-DONE-FAS-E429K.jpg",
+  "fabrication": "Fleece",
+  "category": "Knit",
+  "gsm": 140,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Micro Fleece",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-E44KP",
+  "image": "images/MK-DONE-FAS-E44KP.jpg",
+  "fabrication": "Mesh",
+  "category": "Knit",
+  "gsm": 150,
+  "composition": "91Recycled Polyester / 9Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Mesh",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-E47X7",
+  "image": "images/MK-DONE-FAS-E47X7.jpg",
+  "fabrication": "Double Knit",
+  "category": "Knit",
+  "gsm": 235,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Double Knit",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-EYZWY",
+  "image": "images/MK-DONE-FAS-EYZWY.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 180,
+  "composition": "100Cotton",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "1x1 Rib",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-G3EE8",
+  "image": "images/MK-DONE-FAS-G3EE8.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 150,
+  "composition": "92Recycled Polyester / 8Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-G3KR9",
+  "image": "images/MK-DONE-FAS-G3KR9.jpg",
+  "fabrication": "Mesh",
+  "category": "Knit",
+  "gsm": 100,
+  "composition": "88Recycled Polyester / 12Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Mesh",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-G4KP3",
+  "image": "images/MK-DONE-FAS-G4KP3.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 220,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "2x2 Rib",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-G976W",
+  "image": "images/MK-DONE-FAS-G976W.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 140,
+  "composition": "100Cotton(BCI)",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-KYL25",
+  "image": "images/MK-DONE-FAS-KYL25.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 170,
+  "composition": "93Recycled Polyester / 7Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Rib",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-L2WK4S",
+  "image": "images/MK-DONE-FAS-L2WK4S.jpg",
+  "fabrication": "French Terry",
+  "category": "Knit",
+  "gsm": 330,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Loop Terry",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-L2WZ4",
+  "image": "images/MK-DONE-FAS-L2WZ4.jpg",
+  "fabrication": "French Terry",
+  "category": "Knit",
+  "gsm": 250,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Loop Terry",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-L2X4Z",
+  "image": "images/MK-DONE-FAS-L2X4Z.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 145,
+  "composition": "60Cotton(BCI) / 40Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "1x1 Rib",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
  },
  {
   "code": "MK-DONE-FAS-L2YYG",
@@ -116687,7 +117292,54 @@
   "brands": [
    "tgt"
   ],
-  "article": "Mesh"
+  "article": "Mesh",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-MMXPM",
+  "image": "images/MK-DONE-FAS-MMXPM.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 160,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-P49G2",
+  "image": "images/MK-DONE-FAS-P49G2.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 170,
+  "composition": "95Recycled Polyester / 5Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-PZL23",
+  "image": "images/MK-DONE-FAS-PZL23.jpg",
+  "fabrication": "French Terry",
+  "category": "Knit",
+  "gsm": 180,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "French Terry",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
  },
  {
   "code": "MK-DONE-FAS-PZXP7",
@@ -116700,7 +117352,24 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jersey"
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-W464L",
+  "image": "images/MK-DONE-FAS-W464L.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 140,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
  },
  {
   "code": "MK-DONE-FAS-WX7YY",
@@ -116713,7 +117382,294 @@
   "brands": [
    "tgt"
   ],
-  "article": "Pique"
+  "article": "Pique",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-X0KX5",
+  "image": "images/MK-DONE-FAS-X0KX5.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 180,
+  "composition": "60Cotton / 40Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-X0Z98",
+  "image": "images/MK-DONE-FAS-X0Z98.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 155,
+  "composition": "77Recycled Polyester / 17Lyocell / 6Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-X0ZZL",
+  "image": "images/MK-DONE-FAS-X0ZZL.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 210,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-XGY3X",
+  "image": "images/MK-DONE-FAS-XGY3X.jpg",
+  "fabrication": "Fleece",
+  "category": "Knit",
+  "gsm": 250,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Fleece",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-XMXRP",
+  "image": "images/MK-DONE-FAS-XMXRP.jpg",
+  "fabrication": "Fleece",
+  "category": "Knit",
+  "gsm": 150,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Fleece",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-XPW9G",
+  "image": "images/MK-DONE-FAS-XPW9G.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 145,
+  "composition": "95Cotton(BCI) / 5Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-Y118Y",
+  "image": "images/MK-DONE-FAS-Y118Y.jpg",
+  "fabrication": "Mesh",
+  "category": "Knit",
+  "gsm": 145,
+  "composition": "85Recycled Polyester / 15Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Mesh",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-YP6PW",
+  "image": "images/MK-DONE-FAS-YP6PW.jpg",
+  "fabrication": "Pique",
+  "category": "Knit",
+  "gsm": 95,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Pique",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-YR06X",
+  "image": "images/MK-DONE-FAS-YR06X.jpg",
+  "fabrication": "Ripstop",
+  "category": "Knit",
+  "gsm": 4,
+  "composition": "86Recycled Polyester / 14Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Ripstop",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-YW751",
+  "image": "images/MK-DONE-FAS-YW751.jpg",
+  "fabrication": "Poplin",
+  "category": "Woven",
+  "gsm": 4,
+  "composition": "90Recycled Polyester / 10Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Poplin",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-YWPZ4",
+  "image": "images/MK-DONE-FAS-YWPZ4.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 210,
+  "composition": "91Modal / 9Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "2x2 Rib",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-Z74X3",
+  "image": "images/MK-DONE-FAS-Z74X3.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 115,
+  "composition": "88Recycled Polyester / 12Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-ZR4E7",
+  "image": "images/MK-DONE-FAS-ZR4E7.jpg",
+  "fabrication": "Satin",
+  "category": "Woven",
+  "gsm": 248,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Satin",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-ZXWXY",
+  "image": "images/MK-DONE-FAS-ZXWXY.jpg",
+  "fabrication": "Fleece",
+  "category": "Knit",
+  "gsm": 160,
+  "composition": "100Recycled Polyester",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Fleece",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FAS-ZZYLX",
+  "image": "images/MK-DONE-FAS-ZZYLX.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 150,
+  "composition": "94Recycled Polyester / 6Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FASL5YG7",
+  "image": "images/MK-DONE-FASL5YG7.jpg",
+  "fabrication": "Mesh",
+  "category": "Knit",
+  "gsm": 140,
+  "composition": "91Recycled Polyester / 9Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Mesh",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FASP66Y9",
+  "image": "images/MK-DONE-FASP66Y9.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 220,
+  "composition": "94Modal / 6Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-DONE-FASXML3K",
+  "image": "images/MK-DONE-FASXML3K.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 200,
+  "composition": "91Recycled Polyester / 9Spandex",
+  "mill": "MK自測",
+  "brands": [
+   "tgt"
+  ],
+  "article": "2x2 Rib",
+  "scanSW": "Vizoo",
+  "testSW": "CLO"
+ },
+ {
+  "code": "MK-FAS-FAS-009E",
+  "image": "images/MK-FAS-FAS-009E.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 140,
+  "composition": "Polyester Recycled",
+  "mill": "PT. Win Textile",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-FAS-FAS-06XK5",
@@ -116726,7 +117682,54 @@
   "brands": [
    "tgt"
   ],
-  "article": "Poplin"
+  "article": "Poplin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-0XY5Y",
+  "image": "images/MK-FAS-FAS-0XY5Y.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 150,
+  "composition": "Polyester Recycled",
+  "mill": "Pacific Textiles Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-0ZKG",
+  "image": "images/MK-FAS-FAS-0ZKG.jpg",
+  "fabrication": "French Terry",
+  "category": "Knit",
+  "gsm": 265,
+  "composition": "Cotton",
+  "mill": "Global Dyeing",
+  "brands": [
+   "tgt"
+  ],
+  "article": "French Terry 2-end",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-103P",
+  "image": "images/MK-FAS-FAS-103P.jpg",
+  "fabrication": "Twill",
+  "category": "Woven",
+  "gsm": 153,
+  "composition": "Nylon 6",
+  "mill": "Vietnam Delicacy Industrial Co., Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Twill LH",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-FAS-FAS-2L54Z",
@@ -116739,7 +117742,129 @@
   "brands": [
    "tgt"
   ],
-  "article": "Seersucker"
+  "article": "Seersucker",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-2LRX7",
+  "image": "images/MK-FAS-FAS-2LRX7.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 330,
+  "composition": "Cotton",
+  "mill": "Nice Dyeing Factory Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Rib Flatback",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-2R8K",
+  "image": "images/MK-FAS-FAS-2R8K.jpg",
+  "fabrication": "Mesh",
+  "category": "Knit",
+  "gsm": 65,
+  "composition": "Polyester Recycled",
+  "mill": "Huge Bamboo Enterprise Co.,Ltd.",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Mesh Warp Knit",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-2W1M",
+  "image": "images/MK-FAS-FAS-2W1M.jpg",
+  "fabrication": "Fleece",
+  "category": "Knit",
+  "gsm": 230,
+  "composition": "Cotton",
+  "mill": "Global Dyeing",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Fleece 3-end",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-356ME",
+  "image": "images/MK-FAS-FAS-356ME.jpg",
+  "fabrication": "Mesh",
+  "category": "Knit",
+  "gsm": 120,
+  "composition": "Polyester Recycled",
+  "mill": "Guang Dong Billion Union Textile Co.Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Mesh Weft Knit",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-3642K",
+  "image": "images/MK-FAS-FAS-3642K.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 210,
+  "composition": "Polyester Recycled",
+  "mill": "Huge Bamboo Enterprise Co.,Ltd.",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-3G47",
+  "image": "images/MK-FAS-FAS-3G47.jpg",
+  "fabrication": "Pique",
+  "category": "Knit",
+  "gsm": 200,
+  "composition": "Cotton",
+  "mill": "PT. Win Textile",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Pique Weft Knit",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-3LWER",
+  "image": "images/MK-FAS-FAS-3LWER.jpg",
+  "fabrication": "Tricot",
+  "category": "Knit",
+  "gsm": 170,
+  "composition": "Nylon",
+  "mill": "Guang Dong Billion Union Textile Co.Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Tricot",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-3RL7",
+  "image": "images/MK-FAS-FAS-3RL7.jpg",
+  "fabrication": "Interlock",
+  "category": "Knit",
+  "gsm": 210,
+  "composition": "Polyester Recycled",
+  "mill": "Huge Bamboo Enterprise Co.,Ltd.",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Interlock",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-FAS-FAS-45387",
@@ -116752,7 +117877,39 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jacquard Weft Knit"
+  "article": "Jacquard Weft Knit",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-48RK0",
+  "image": "images/MK-FAS-FAS-48RK0.jpg",
+  "fabrication": "Dobby",
+  "category": "Woven",
+  "gsm": 150,
+  "composition": "Polyester Recycled",
+  "mill": "Vietnam Delicacy Industrial Co., Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Dobby",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-5GX0P",
+  "image": "images/MK-FAS-FAS-5GX0P.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 240,
+  "composition": "Polyester Recycled",
+  "mill": "Huge Bamboo Enterprise Co.,Ltd.",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-FAS-FAS-62626",
@@ -116765,7 +117922,354 @@
   "brands": [
    "tgt"
   ],
-  "article": "Poplin"
+  "article": "Poplin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-7PE7W",
+  "image": "images/MK-FAS-FAS-7PE7W.jpg",
+  "fabrication": "Double Weave",
+  "category": "Woven",
+  "gsm": 140,
+  "composition": "Polyester Recycled",
+  "mill": "Vietnam Delicacy Industrial Co., Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Double Weave",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-89E0",
+  "image": "images/MK-FAS-FAS-89E0.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 195,
+  "composition": "Polyester Recycled",
+  "mill": "Pacific Textiles Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-8G1R",
+  "image": "images/MK-FAS-FAS-8G1R.jpg",
+  "fabrication": "Jacquard",
+  "category": "Knit",
+  "gsm": 115,
+  "composition": "Polyester Recycled",
+  "mill": "Huge Bamboo Enterprise Co.,Ltd.",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jacquard Weft Knit",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-95EZY",
+  "image": "images/MK-FAS-FAS-95EZY.jpg",
+  "fabrication": "Poplin",
+  "category": "Woven",
+  "gsm": 116,
+  "composition": "Polyester Recycled",
+  "mill": "Li Peng",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Poplin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-EG0E0",
+  "image": "images/MK-FAS-FAS-EG0E0.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 220,
+  "composition": "Cotton",
+  "mill": "Pacific Textiles Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Rib 1x1",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-ELZE",
+  "image": "images/MK-FAS-FAS-ELZE.jpg",
+  "fabrication": "Mesh",
+  "category": "Knit",
+  "gsm": 75,
+  "composition": "Polyester Recycled",
+  "mill": "Huge Bamboo Enterprise Co.,Ltd.",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Mesh Warp Knit",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-G203P",
+  "image": "images/MK-FAS-FAS-G203P.jpg",
+  "fabrication": "Poplin",
+  "category": "Woven",
+  "gsm": 126,
+  "composition": "Polyester Recycled",
+  "mill": "Vietnam Delicacy Industrial Co., Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Poplin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-G234R",
+  "image": "images/MK-FAS-FAS-G234R.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 275,
+  "composition": "Cotton",
+  "mill": "Pacific Textiles Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Rib 1x1",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-G2G99",
+  "image": "images/MK-FAS-FAS-G2G99.jpg",
+  "fabrication": "Twill",
+  "category": "Woven",
+  "gsm": 194,
+  "composition": "Polyester Recycled",
+  "mill": "Vietnam Delicacy Industrial Co., Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Twill RH",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-GZ73",
+  "image": "images/MK-FAS-FAS-GZ73.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 260,
+  "composition": "Cotton",
+  "mill": "Global Dyeing",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Rib 2x2",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-J1P3",
+  "image": "images/MK-FAS-FAS-J1P3.jpg",
+  "fabrication": "Twill",
+  "category": "Woven",
+  "gsm": 233,
+  "composition": "Cotton",
+  "mill": "Tak Sang Company",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Twill LH",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-J4W2",
+  "image": "images/MK-FAS-FAS-J4W2.jpg",
+  "fabrication": "Tricot",
+  "category": "Knit",
+  "gsm": 95,
+  "composition": "Polyester Recycled",
+  "mill": "Huge Bamboo Enterprise Co.,Ltd.",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Tricot",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-JL7Z",
+  "image": "images/MK-FAS-FAS-JL7Z.jpg",
+  "fabrication": "Fleece",
+  "category": "Knit",
+  "gsm": 140,
+  "composition": "Polyester Recycled",
+  "mill": "Huge Bamboo Enterprise Co.,Ltd.",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Fleece 2-end",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-JMWE",
+  "image": "images/MK-FAS-FAS-JMWE.jpg",
+  "fabrication": "Mesh",
+  "category": "Knit",
+  "gsm": 160,
+  "composition": "Polyester Recycled",
+  "mill": "Huge Bamboo Enterprise Co.,Ltd.",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Mesh Warp Knit",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-K85Z",
+  "image": "images/MK-FAS-FAS-K85Z.jpg",
+  "fabrication": "Dobby",
+  "category": "Woven",
+  "gsm": 172,
+  "composition": "Polyester Recycled",
+  "mill": "Vietnam Delicacy Industrial Co., Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Dobby",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-KG7P",
+  "image": "images/MK-FAS-FAS-KG7P.jpg",
+  "fabrication": "Poplin",
+  "category": "Woven",
+  "gsm": 95,
+  "composition": "Nylon",
+  "mill": "Vietnam Delicacy Industrial Co., Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Poplin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-L047Y",
+  "image": "images/MK-FAS-FAS-L047Y.jpg",
+  "fabrication": "Dobby",
+  "category": "Woven",
+  "gsm": 136,
+  "composition": "Polyester Recycled",
+  "mill": "Vietnam Delicacy Industrial Co., Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Dobby",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-LR7ZZ",
+  "image": "images/MK-FAS-FAS-LR7ZZ.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 200,
+  "composition": "Nylon",
+  "mill": "Huge Bamboo Enterprise Co.,Ltd.",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-M5X4",
+  "image": "images/MK-FAS-FAS-M5X4.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 155,
+  "composition": "Polyester Recycled",
+  "mill": "Huge Bamboo Enterprise Co.,Ltd.",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-M8Y6R",
+  "image": "images/MK-FAS-FAS-M8Y6R.jpg",
+  "fabrication": "Seersucker",
+  "category": "Woven",
+  "gsm": 163,
+  "composition": "Polyester Recycled",
+  "mill": "Vietnam Delicacy Industrial Co., Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Seersucker",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-M9W2",
+  "image": "images/MK-FAS-FAS-M9W2.jpg",
+  "fabrication": "French Terry",
+  "category": "Knit",
+  "gsm": 240,
+  "composition": "Cotton",
+  "mill": "Global Dyeing",
+  "brands": [
+   "tgt"
+  ],
+  "article": "French Terry 2-end",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-MEYK",
+  "image": "images/MK-FAS-FAS-MEYK.jpg",
+  "fabrication": "French Terry",
+  "category": "Knit",
+  "gsm": 202,
+  "composition": "Polyester Recycled",
+  "mill": "Hung's Fortune International Co.,Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Loop Terry",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-NEP3",
+  "image": "images/MK-FAS-FAS-NEP3.jpg",
+  "fabrication": "Taffeta",
+  "category": "Woven",
+  "gsm": 88,
+  "composition": "Nylon",
+  "mill": "Li Peng",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Taffeta",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-FAS-FAS-NPKG",
@@ -116778,7 +118282,9 @@
   "brands": [
    "tgt"
   ],
-  "article": "Tricot"
+  "article": "Tricot",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-FAS-FAS-P6GK8",
@@ -116791,7 +118297,9 @@
   "brands": [
    "tgt"
   ],
-  "article": "Seersucker"
+  "article": "Seersucker",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-FAS-FAS-PRWW",
@@ -116804,7 +118312,159 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jersey"
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-R1Y0E",
+  "image": "images/MK-FAS-FAS-R1Y0E.jpg",
+  "fabrication": "Mesh",
+  "category": "Knit",
+  "gsm": 165,
+  "composition": "Polyester Recycled",
+  "mill": "New Wide Enterprise Co. Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Mesh Weft Knit",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-W2Y2",
+  "image": "images/MK-FAS-FAS-W2Y2.jpg",
+  "fabrication": "French Terry",
+  "category": "Knit",
+  "gsm": 240,
+  "composition": "Cotton",
+  "mill": "Samil Vina Co., Ltd.",
+  "brands": [
+   "tgt"
+  ],
+  "article": "French Terry 2-end",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-W9G2",
+  "image": "images/MK-FAS-FAS-W9G2.jpg",
+  "fabrication": "Fleece",
+  "category": "Knit",
+  "gsm": 260,
+  "composition": "Cotton",
+  "mill": "Pacific Textiles Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Fleece 3-end",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-W9L2",
+  "image": "images/MK-FAS-FAS-W9L2.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 160,
+  "composition": "Cotton",
+  "mill": "PT. Win Textile",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-WG1W",
+  "image": "images/MK-FAS-FAS-WG1W.jpg",
+  "fabrication": "Poplin",
+  "category": "Woven",
+  "gsm": 108,
+  "composition": "Nylon 6",
+  "mill": "Vietnam Delicacy Industrial Co., Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Poplin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-XM7ZG",
+  "image": "images/MK-FAS-FAS-XM7ZG.jpg",
+  "fabrication": "Seersucker",
+  "category": "Woven",
+  "gsm": 80,
+  "composition": "Nylon",
+  "mill": "HuaFeng",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Seersucker",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-Z2KER",
+  "image": "images/MK-FAS-FAS-Z2KER.jpg",
+  "fabrication": "Twill",
+  "category": "Woven",
+  "gsm": 186,
+  "composition": "Rayon",
+  "mill": "Huajin Textile Printing & Dyeing Co Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Twill RH",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-Z93W2",
+  "image": "images/MK-FAS-FAS-Z93W2.jpg",
+  "fabrication": "Poplin",
+  "category": "Woven",
+  "gsm": 125,
+  "composition": "Nylon 6",
+  "mill": "Vietnam Delicacy Industrial Co., Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Poplin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-ZM75",
+  "image": "images/MK-FAS-FAS-ZM75.jpg",
+  "fabrication": "Tricot",
+  "category": "Knit",
+  "gsm": 200,
+  "composition": "Polyester Recycled",
+  "mill": "Huge Bamboo Enterprise Co.,Ltd.",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Tricot",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-FAS-FAS-ZMY3",
+  "image": "images/MK-FAS-FAS-ZMY3.jpg",
+  "fabrication": "Double Knit",
+  "category": "Knit",
+  "gsm": 280,
+  "composition": "Polyester Recycled",
+  "mill": "New Wide Enterprise Co. Ltd",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Double Knit",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1039372",
@@ -116817,7 +118477,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "MESH Mesh - weft knit Piece Dye - Solid"
+  "article": "MESH Mesh - weft knit Piece Dye - Solid",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1042108",
@@ -116830,7 +118492,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "SUPERSONIC Interlock Piece Dye - Solid Wicking Quick DryBreathable"
+  "article": "SUPERSONIC Interlock Piece Dye - Solid Wicking Quick DryBreathable",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1047441",
@@ -116844,7 +118508,9 @@
    "Athleta",
    "Gap Inc."
   ],
-  "article": "POWERVITA Interlock Piece Dye - Solid ATH-Breathable ATH-Quick Dry ATH-Wicking"
+  "article": "POWERVITA Interlock Piece Dye - Solid ATH-Breathable ATH-Quick Dry ATH-Wicking",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1049496",
@@ -116857,7 +118523,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "POWERMOVE Interlock Piece Dye - Solid ATH-4-way stretch ATH-Breathable ATH-UPF 40+ ATH-Wicking"
+  "article": "POWERMOVE Interlock Piece Dye - Solid ATH-4-way stretch ATH-Breathable ATH-UPF 40+ ATH-Wicking",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1049510",
@@ -116870,7 +118538,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "VITAFREE Interlock Piece Dye - Solid"
+  "article": "VITAFREE Interlock Piece Dye - Solid",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1051824",
@@ -116883,7 +118553,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "GIRLS PERFORMANCE TOPS  Piece Dye - Solid ATH-Breathable ATH-Quick Dry ATH-UPF 40+ ATH-Wicking"
+  "article": "GIRLS PERFORMANCE TOPS  Piece Dye - Solid ATH-Breathable ATH-Quick Dry ATH-UPF 40+ ATH-Wicking",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1052886",
@@ -116896,7 +118568,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "DREAM DRAPE  Piece Dye - Single Dye Breathable All Around Stretch Easy-care"
+  "article": "DREAM DRAPE  Piece Dye - Single Dye Breathable All Around Stretch Easy-care",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1052891",
@@ -116909,7 +118583,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "MESH BACK SWEATSHIRT  Piece Dye - Solid"
+  "article": "MESH BACK SWEATSHIRT  Piece Dye - Solid",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1054546",
@@ -116922,7 +118598,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "MESH BACK SWEATSHIRT 2X2 Piece Dye - Solid Breathable"
+  "article": "MESH BACK SWEATSHIRT 2X2 Piece Dye - Solid Breathable",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1054848",
@@ -116935,7 +118613,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "TRUE TERRY Terry - 3 thread French Terry Piece Dye - Solid ATH-Breathable"
+  "article": "TRUE TERRY Terry - 3 thread French Terry Piece Dye - Solid ATH-Breathable",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1055886",
@@ -116948,7 +118628,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "WOOL BLEND BASE LAYER Single Jersey- Single Jersey Piece Dye - Single Dye Piece Dye - Solid ATH-Breathable ATH-Heat Generating ATH-Stretch ATH-Warmth Claim: WARM ATH-Wicking"
+  "article": "WOOL BLEND BASE LAYER Single Jersey- Single Jersey Piece Dye - Single Dye Piece Dye - Solid ATH-Breathable ATH-Heat Generating ATH-Stretch ATH-Warmth Claim: WARM ATH-Wicking",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1055911",
@@ -116961,7 +118643,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "BASKETBALL MESH Mesh - warp knit Piece Dye - Solid ATH-Breathable ATH-Mechanical Stretch ATH-Quick Dry"
+  "article": "BASKETBALL MESH Mesh - warp knit Piece Dye - Solid ATH-Breathable ATH-Mechanical Stretch ATH-Quick Dry",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1058728",
@@ -116974,7 +118658,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "STUDIO RIB Variegated Rib Piece Dye - Solid ATH-Quick Dry ATH-UPF 40+ ATH-Wicking ATH-Breathable"
+  "article": "STUDIO RIB Variegated Rib Piece Dye - Solid ATH-Quick Dry ATH-UPF 40+ ATH-Wicking ATH-Breathable",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1059116",
@@ -116987,7 +118673,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "RIGHT MOVES COTTON Rib- Others Piece Dye - Solid ATH-Breathable"
+  "article": "RIGHT MOVES COTTON Rib- Others Piece Dye - Solid ATH-Breathable",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1061451",
@@ -117000,7 +118688,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "SUNDAY RIB Variegated Rib Heather"
+  "article": "SUNDAY RIB Variegated Rib Heather",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1061657",
@@ -117013,7 +118703,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "RIGHT MOVES COTTON Rib- Others Piece Dye - Solid ATH-Breathable ATH-Easy Care (MW, Tumble Dry)"
+  "article": "RIGHT MOVES COTTON Rib- Others Piece Dye - Solid ATH-Breathable ATH-Easy Care (MW, Tumble Dry)",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1062981",
@@ -117026,7 +118718,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "TRUE TERRY 2X2 Piece Dye - Solid ATH-Breathable"
+  "article": "TRUE TERRY 2X2 Piece Dye - Solid ATH-Breathable",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1066026",
@@ -117039,7 +118733,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "GLEAM 2-TONE MESH Tricot- Tricot Piece Dye - Solid Cationic Dye ATH-UPF 40+ ATH-Wicking ATH-Quick Dry ATH-Breathable"
+  "article": "GLEAM 2-TONE MESH Tricot- Tricot Piece Dye - Solid Cationic Dye ATH-UPF 40+ ATH-Wicking ATH-Quick Dry ATH-Breathable",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-1067109",
@@ -117052,7 +118748,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "Single Jersey- Drop Needle Piece Dye - Solid Breathable"
+  "article": "Single Jersey- Drop Needle Piece Dye - Solid Breathable",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-GAP-303220",
@@ -117065,7 +118763,9 @@
   "brands": [
    "Athleta"
   ],
-  "article": "WARM HANDED KNIT French Terry Piece Dye ATH-UPF 40+ Breathable Polygiene Wicking"
+  "article": "WARM HANDED KNIT French Terry Piece Dye ATH-UPF 40+ Breathable Polygiene Wicking",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAB-6R72",
@@ -117078,7 +118778,39 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jersey"
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAB-7K1E",
+  "image": "images/MK-TGT-FAB-7K1E.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 190,
+  "composition": "48/49/3",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "1x1 Rib",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAB-8Y873",
+  "image": "images/MK-TGT-FAB-8Y873.jpg",
+  "fabrication": "Crepe",
+  "category": "Woven",
+  "gsm": 150,
+  "composition": "100",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Crepe",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAB-Y4ZW",
@@ -117091,7 +118823,24 @@
   "brands": [
    "tgt"
   ],
-  "article": "Mesh"
+  "article": "Mesh",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAB-Z912",
+  "image": "images/MK-TGT-FAB-Z912.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 120,
+  "composition": "100",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAB-ZM6Z",
@@ -117104,7 +118853,54 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jersey"
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-0023",
+  "image": "images/MK-TGT-FAS-0023.jpg",
+  "fabrication": "Fleece",
+  "category": "Knit",
+  "gsm": 250,
+  "composition": "60/30/10",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Fleece Siro",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-00Z3",
+  "image": "images/MK-TGT-FAS-00Z3.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 150,
+  "composition": "60/40",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey Snow",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-05Y4K",
+  "image": "images/MK-TGT-FAS-05Y4K.jpg",
+  "fabrication": "Satin",
+  "category": "Woven",
+  "gsm": 135,
+  "composition": "100",
+  "mill": "SPARK",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Satin",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-0659P",
@@ -117117,7 +118913,9 @@
   "brands": [
    "tgt"
   ],
-  "article": "Mesh"
+  "article": "Mesh",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-0GWZ",
@@ -117130,7 +118928,9 @@
   "brands": [
    "tgt"
   ],
-  "article": "Fleece 2-end"
+  "article": "Fleece 2-end",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-0XL54",
@@ -117143,7 +118943,84 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jersey"
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-1ZXY3",
+  "image": "images/MK-TGT-FAS-1ZXY3.jpg",
+  "fabrication": "Twill",
+  "category": "Woven",
+  "gsm": 203,
+  "composition": "55/40/5",
+  "mill": "SPARK",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Twill",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-2530",
+  "image": "images/MK-TGT-FAS-2530.jpg",
+  "fabrication": "French Terry",
+  "category": "Knit",
+  "gsm": 220,
+  "composition": "94/6",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "FTERRY",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-2K0R",
+  "image": "images/MK-TGT-FAS-2K0R.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 160,
+  "composition": "60/40",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-2LW47",
+  "image": "images/MK-TGT-FAS-2LW47.jpg",
+  "fabrication": "Tricot",
+  "category": "Woven",
+  "gsm": 170,
+  "composition": "77/23",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Tricot",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-2MP8W",
+  "image": "images/MK-TGT-FAS-2MP8W.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 140,
+  "composition": "100",
+  "mill": "",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-2MY0Z",
@@ -117156,12 +119033,29 @@
   "brands": [
    "tgt"
   ],
-  "article": "Double Knit_Interlock"
+  "article": "Double Knit_Interlock",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-2ZX49",
+  "image": "images/MK-TGT-FAS-2ZX49.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 220,
+  "composition": "60/40",
+  "mill": "SPARK",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Rib1x1",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-35Y7P",
   "image": "images/MK-TGT-FAS-35Y7P.jpg",
-  "fabrication": "其他",
+  "fabrication": "Faux Shearling",
   "category": "Knit",
   "gsm": 310,
   "composition": "100",
@@ -117169,7 +119063,39 @@
   "brands": [
    "tgt"
   ],
-  "article": "FauxShearling"
+  "article": "FauxShearling",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-3GR3",
+  "image": "images/MK-TGT-FAS-3GR3.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 140,
+  "composition": "60/40",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-3GW7",
+  "image": "images/MK-TGT-FAS-3GW7.jpg",
+  "fabrication": "Fleece",
+  "category": "Knit",
+  "gsm": 250,
+  "composition": "60/40",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Fleece",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-3X80",
@@ -117182,7 +119108,99 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jersey"
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-3YWL",
+  "image": "images/MK-TGT-FAS-3YWL.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 180,
+  "composition": "58/38/4",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "1x1 Rib",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-4439",
+  "image": "images/MK-TGT-FAS-4439.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 160,
+  "composition": "90/10",
+  "mill": "SPARK",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-47LX5",
+  "image": "images/MK-TGT-FAS-47LX5.jpg",
+  "fabrication": "Poplin",
+  "category": "Woven",
+  "gsm": 128,
+  "composition": "86/14",
+  "mill": "SPARK",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Poplin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-4PLL",
+  "image": "images/MK-TGT-FAS-4PLL.jpg",
+  "fabrication": "French Terry",
+  "category": "Knit",
+  "gsm": 250,
+  "composition": "60/40",
+  "mill": "SPARK",
+  "brands": [
+   "tgt"
+  ],
+  "article": "FrenchTerry 3-end",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-54W6Y",
+  "image": "images/MK-TGT-FAS-54W6Y.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 250,
+  "composition": "67/28/5",
+  "mill": "SPARK",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-5GM4",
+  "image": "images/MK-TGT-FAS-5GM4.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 130,
+  "composition": "60/40",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Stretch Jersey",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-6ZXXE",
@@ -117195,7 +119213,84 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jersey"
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-7KLX",
+  "image": "images/MK-TGT-FAS-7KLX.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 180,
+  "composition": "57/38/5",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Stretch Jersey Triblend",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-7KZX",
+  "image": "images/MK-TGT-FAS-7KZX.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 180,
+  "composition": "60/40",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-87XR8",
+  "image": "images/MK-TGT-FAS-87XR8.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 155,
+  "composition": "100",
+  "mill": "",
+  "brands": [
+   "tgt"
+  ],
+  "article": "1x1Rib",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-99YR",
+  "image": "images/MK-TGT-FAS-99YR.jpg",
+  "fabrication": "French Terry",
+  "category": "Knit",
+  "gsm": 200,
+  "composition": "60/40",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "French Terry",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-9KL6P",
+  "image": "images/MK-TGT-FAS-9KL6P.jpg",
+  "fabrication": "Faux Shearling",
+  "category": "Knit",
+  "gsm": 230,
+  "composition": "100",
+  "mill": "",
+  "brands": [
+   "tgt"
+  ],
+  "article": "FauxShearling",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-9KX3P",
@@ -117208,7 +119303,9 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jacquard"
+  "article": "Jacquard",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-E7ER3",
@@ -117221,7 +119318,54 @@
   "brands": [
    "tgt"
   ],
-  "article": "Fleece 3-end"
+  "article": "Fleece 3-end",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-EL1Y",
+  "image": "images/MK-TGT-FAS-EL1Y.jpg",
+  "fabrication": "French Terry",
+  "category": "Knit",
+  "gsm": 240,
+  "composition": "100",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "French Terry",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-EL5MK",
+  "image": "images/MK-TGT-FAS-EL5MK.jpg",
+  "fabrication": "Interlock",
+  "category": "Knit",
+  "gsm": 215,
+  "composition": "79/21",
+  "mill": "SPARK",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Interlock",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-EL717",
+  "image": "images/MK-TGT-FAS-EL717.jpg",
+  "fabrication": "Ponte",
+  "category": "Knit",
+  "gsm": 260,
+  "composition": "71/29",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Ponte",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-ELGYX",
@@ -117234,7 +119378,9 @@
   "brands": [
    "tgt"
   ],
-  "article": "Twill"
+  "article": "Twill",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-EYL17",
@@ -117247,7 +119393,129 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jersey"
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-G713",
+  "image": "images/MK-TGT-FAS-G713.jpg",
+  "fabrication": "Double Knit",
+  "category": "Knit",
+  "gsm": 240,
+  "composition": "57/43",
+  "mill": "SPARK",
+  "brands": [
+   "tgt"
+  ],
+  "article": "DoubleKnit",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-G888",
+  "image": "images/MK-TGT-FAS-G888.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 160,
+  "composition": "95/5",
+  "mill": "",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Stretch Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-G8W7",
+  "image": "images/MK-TGT-FAS-G8W7.jpg",
+  "fabrication": "Fleece",
+  "category": "Knit",
+  "gsm": 250,
+  "composition": "59/31/10",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Fleece",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-GMWZ",
+  "image": "images/MK-TGT-FAS-GMWZ.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 140,
+  "composition": "60/40",
+  "mill": "Spark Virtual",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-J2G4",
+  "image": "images/MK-TGT-FAS-J2G4.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 160,
+  "composition": "58/37/5",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "2x2 Rib",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-JGM4",
+  "image": "images/MK-TGT-FAS-JGM4.jpg",
+  "fabrication": "Fleece",
+  "category": "Knit",
+  "gsm": 265,
+  "composition": "55/35/10",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Fleece",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-JL6E",
+  "image": "images/MK-TGT-FAS-JL6E.jpg",
+  "fabrication": "Rib",
+  "category": "Knit",
+  "gsm": 220,
+  "composition": "58/38/4",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "2x2 Rib",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-JM70",
+  "image": "images/MK-TGT-FAS-JM70.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 150,
+  "composition": "85/15",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey Faux heather",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-JY0K",
@@ -117260,12 +119528,44 @@
   "brands": [
    "tgt"
   ],
-  "article": "Interlock"
+  "article": "Interlock",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-K1PL",
+  "image": "images/MK-TGT-FAS-K1PL.jpg",
+  "fabrication": "Fleece",
+  "category": "Knit",
+  "gsm": 140,
+  "composition": "100",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "MicroFleece",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-K832",
+  "image": "images/MK-TGT-FAS-K832.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 160,
+  "composition": "100",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-KL4E7",
   "image": "images/MK-TGT-FAS-KL4E7.jpg",
-  "fabrication": "其他",
+  "fabrication": "Velour",
   "category": "Knit",
   "gsm": 240,
   "composition": "95/5",
@@ -117273,7 +119573,54 @@
   "brands": [
    "tgt"
   ],
-  "article": "Velour"
+  "article": "Velour",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-KL4Y7",
+  "image": "images/MK-TGT-FAS-KL4Y7.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 206,
+  "composition": "47/46/7",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-KLL7X",
+  "image": "images/MK-TGT-FAS-KLL7X.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 195,
+  "composition": "86/14",
+  "mill": "SPARK",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-KLXGL",
+  "image": "images/MK-TGT-FAS-KLXGL.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 140,
+  "composition": "100",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Brush Jersey",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-KLYZL",
@@ -117286,7 +119633,24 @@
   "brands": [
    "tgt"
   ],
-  "article": "Mesh"
+  "article": "Mesh",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-L0262",
+  "image": "images/MK-TGT-FAS-L0262.jpg",
+  "fabrication": "Ponte",
+  "category": "Knit",
+  "gsm": 260,
+  "composition": "75/25",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Ponte",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-L0L5L",
@@ -117299,7 +119663,39 @@
   "brands": [
    "tgt"
   ],
-  "article": "Double Knit"
+  "article": "Double Knit",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-LL07",
+  "image": "images/MK-TGT-FAS-LL07.jpg",
+  "fabrication": "Pique",
+  "category": "Knit",
+  "gsm": 95,
+  "composition": "100",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Pique Weft Knit",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-LWYM",
+  "image": "images/MK-TGT-FAS-LWYM.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 200,
+  "composition": "95/5",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Stretch Jersey",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-LY2L",
@@ -117312,7 +119708,24 @@
   "brands": [
    "tgt"
   ],
-  "article": "Mesh"
+  "article": "Mesh",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-M940",
+  "image": "images/MK-TGT-FAS-M940.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 170,
+  "composition": "100",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Slub Jersey",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-MR2R3",
@@ -117325,7 +119738,39 @@
   "brands": [
    "tgt"
   ],
-  "article": "Interlock"
+  "article": "Interlock",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-N0M6",
+  "image": "images/MK-TGT-FAS-N0M6.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 220,
+  "composition": "95/5",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Stretch Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-N7Z9",
+  "image": "images/MK-TGT-FAS-N7Z9.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 210,
+  "composition": "93/7",
+  "mill": "SPARK",
+  "brands": [
+   "tgt"
+  ],
+  "article": "JERSEY",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-P3098",
@@ -117338,7 +119783,54 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jacquard"
+  "article": "Jacquard",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-P54X",
+  "image": "images/MK-TGT-FAS-P54X.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 180,
+  "composition": "57/38/5",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-P64L1",
+  "image": "images/MK-TGT-FAS-P64L1.jpg",
+  "fabrication": "Waffle",
+  "category": "Knit",
+  "gsm": 310,
+  "composition": "87/13",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Waffle",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-P64ME",
+  "image": "images/MK-TGT-FAS-P64ME.jpg",
+  "fabrication": "Tricot",
+  "category": "Knit",
+  "gsm": 200,
+  "composition": "100",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Tricot",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-P6PZ8",
@@ -117351,7 +119843,9 @@
   "brands": [
    "tgt"
   ],
-  "article": "Poplin"
+  "article": "Poplin",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-P6YYE",
@@ -117364,7 +119858,9 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jersey"
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-P7XM",
@@ -117377,7 +119873,54 @@
   "brands": [
    "tgt"
   ],
-  "article": "Tricot"
+  "article": "Tricot",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-R6405",
+  "image": "images/MK-TGT-FAS-R6405.jpg",
+  "fabrication": "Satin",
+  "category": "Woven",
+  "gsm": 120,
+  "composition": "100",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Satin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-RW07",
+  "image": "images/MK-TGT-FAS-RW07.jpg",
+  "fabrication": "Mesh",
+  "category": "Knit",
+  "gsm": 145,
+  "composition": "89/11",
+  "mill": "SPARK",
+  "brands": [
+   "tgt"
+  ],
+  "article": "MESH",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-RZ52",
+  "image": "images/MK-TGT-FAS-RZ52.jpg",
+  "fabrication": "Velour",
+  "category": "Knit",
+  "gsm": 180,
+  "composition": "96/4",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Velour",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-W0M3",
@@ -117390,7 +119933,9 @@
   "brands": [
    "tgt"
   ],
-  "article": "Fleece"
+  "article": "Fleece",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-WXLX0",
@@ -117403,7 +119948,9 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jersey"
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-X03WE",
@@ -117416,7 +119963,9 @@
   "brands": [
    "tgt"
   ],
-  "article": "3x2 Rib"
+  "article": "3x2 Rib",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-X22P",
@@ -117429,7 +119978,24 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jersey"
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-X2EY6",
+  "image": "images/MK-TGT-FAS-X2EY6.jpg",
+  "fabrication": "Mesh",
+  "category": "Knit",
+  "gsm": 150,
+  "composition": "58/38/4",
+  "mill": "",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Mesh",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-X8P1",
@@ -117442,12 +120008,14 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jersey"
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-YKX4X",
   "image": "images/MK-TGT-FAS-YKX4X.jpg",
-  "fabrication": "其他",
+  "fabrication": "Ottoman",
   "category": "Knit",
   "gsm": 188,
   "composition": "98/2",
@@ -117455,7 +120023,9 @@
   "brands": [
    "tgt"
   ],
-  "article": "Ottoman"
+  "article": "Ottoman",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-YPZ2P",
@@ -117468,7 +120038,39 @@
   "brands": [
    "tgt"
   ],
-  "article": "Poplin"
+  "article": "Poplin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-YXM5",
+  "image": "images/MK-TGT-FAS-YXM5.jpg",
+  "fabrication": "Fleece",
+  "category": "Knit",
+  "gsm": 230,
+  "composition": "59/41",
+  "mill": "SPARK",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Fleece",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-Z2R3M",
+  "image": "images/MK-TGT-FAS-Z2R3M.jpg",
+  "fabrication": "Fleece",
+  "category": "Knit",
+  "gsm": 150,
+  "composition": "100",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Micro Fleece",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-Z8RE",
@@ -117481,12 +120083,29 @@
   "brands": [
    "tgt"
   ],
-  "article": "Jersey"
+  "article": "Jersey",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-Z9YY",
+  "image": "images/MK-TGT-FAS-Z9YY.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": 150,
+  "composition": "100",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Slub Jersey",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-ZZL42",
   "image": "images/MK-TGT-FAS-ZZL42.jpg",
-  "fabrication": "其他",
+  "fabrication": "Double Weave",
   "category": "Woven",
   "gsm": 158,
   "composition": "89/11",
@@ -117494,7 +120113,69 @@
   "brands": [
    "tgt"
   ],
-  "article": "DoubleWeave"
+  "article": "DoubleWeave",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FR116913",
+  "image": "images/MK-TGT-FR116913.jpg",
+  "fabrication": "Faux Shearling",
+  "category": "Knit",
+  "gsm": 265,
+  "composition": "100",
+  "mill": "Spark Virtual",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Faux fur",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FR41001",
+  "image": "images/MK-TGT-FR41001.jpg",
+  "fabrication": "Chenille",
+  "category": "Knit",
+  "gsm": 255,
+  "composition": "76/24",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Chenille",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-12E5",
+  "image": "images/MK-TGT-FAS-12E5.jpg",
+  "fabrication": "Oxford",
+  "category": "Woven",
+  "gsm": null,
+  "composition": "96/4",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Stretch Oxford",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-35K8Y",
+  "image": "images/MK-TGT-FAS-35K8Y.jpg",
+  "fabrication": "Faux Leather",
+  "category": "Woven",
+  "gsm": null,
+  "composition": "50/50",
+  "mill": "SPARK",
+  "brands": [
+   "tgt"
+  ],
+  "article": "FauxLeatherWoven",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-60K8K",
@@ -117507,7 +120188,24 @@
   "brands": [
    "tgt"
   ],
-  "article": "Poplin"
+  "article": "Poplin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-60ZK",
+  "image": "images/MK-TGT-FAS-60ZK.jpg",
+  "fabrication": "Oxford",
+  "category": "Woven",
+  "gsm": null,
+  "composition": "100",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Oxford",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-958E",
@@ -117520,7 +120218,54 @@
   "brands": [
    "tgt"
   ],
-  "article": "Poplin"
+  "article": "Poplin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-GX98",
+  "image": "images/MK-TGT-FAS-GX98.jpg",
+  "fabrication": "Poplin",
+  "category": "Woven",
+  "gsm": null,
+  "composition": "100",
+  "mill": "Makalot",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Poplin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-J03K",
+  "image": "images/MK-TGT-FAS-J03K.jpg",
+  "fabrication": "Double Weave",
+  "category": "Woven",
+  "gsm": null,
+  "composition": "100",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Gauze Doubleweave",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-J31W",
+  "image": "images/MK-TGT-FAS-J31W.jpg",
+  "fabrication": "Poplin",
+  "category": "Woven",
+  "gsm": null,
+  "composition": "76/21/3",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Tech Poplin",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-LR5R",
@@ -117533,7 +120278,99 @@
   "brands": [
    "tgt"
   ],
-  "article": "Ripstop"
+  "article": "Ripstop",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-M9R0",
+  "image": "images/MK-TGT-FAS-M9R0.jpg",
+  "fabrication": "Poplin",
+  "category": "Woven",
+  "gsm": null,
+  "composition": "100",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Slub Poplin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-N0YK",
+  "image": "images/MK-TGT-FAS-N0YK.jpg",
+  "fabrication": "Poplin",
+  "category": "Woven",
+  "gsm": null,
+  "composition": "97/3",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Stretch Poplin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-N2XZ",
+  "image": "images/MK-TGT-FAS-N2XZ.jpg",
+  "fabrication": "Flannel",
+  "category": "Woven",
+  "gsm": null,
+  "composition": "100",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Flannel Jaspe",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-N918",
+  "image": "images/MK-TGT-FAS-N918.jpg",
+  "fabrication": "Twill",
+  "category": "Woven",
+  "gsm": null,
+  "composition": "70/30",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Herringbone Flannel Twill",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-NKPM",
+  "image": "images/MK-TGT-FAS-NKPM.jpg",
+  "fabrication": "Herringbone",
+  "category": "Woven",
+  "gsm": null,
+  "composition": "100",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Herringbone",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-NME0",
+  "image": "images/MK-TGT-FAS-NME0.jpg",
+  "fabrication": "Twill",
+  "category": "Woven",
+  "gsm": null,
+  "composition": "93/7",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Twill 2x1 RH",
+  "scanSW": "",
+  "testSW": ""
  },
  {
   "code": "MK-TGT-FAS-TBC",
@@ -117546,7 +120383,69 @@
   "brands": [
    "tgt"
   ],
-  "article": "Twill"
+  "article": "Twill",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-X20P",
+  "image": "images/MK-TGT-FAS-X20P.jpg",
+  "fabrication": "Twill",
+  "category": "Woven",
+  "gsm": null,
+  "composition": "100",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Twill LH",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-YR841",
+  "image": "images/MK-TGT-FAS-YR841.jpg",
+  "fabrication": "Twill",
+  "category": "Woven",
+  "gsm": null,
+  "composition": "98/2",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Stretch Twill 3x1",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FAS-Z9RY",
+  "image": "images/MK-TGT-FAS-Z9RY.jpg",
+  "fabrication": "Poplin",
+  "category": "Woven",
+  "gsm": null,
+  "composition": "70/30",
+  "mill": "Spark",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Poplin",
+  "scanSW": "",
+  "testSW": ""
+ },
+ {
+  "code": "MK-TGT-FR118844",
+  "image": "images/MK-TGT-FR118844.jpg",
+  "fabrication": "Jersey",
+  "category": "Knit",
+  "gsm": null,
+  "composition": "98/3",
+  "mill": "Spark Virtual",
+  "brands": [
+   "tgt"
+  ],
+  "article": "Stretch Jersey",
+  "scanSW": "",
+  "testSW": ""
  }
 ]</script>
 <script>
@@ -117571,32 +120470,54 @@ async function load(){
 }
 
 /* ---------- 多頁路由 ---------- */
+let TOP='fabric'; // 'fabric' or 'gallery'
 function go(p){
-  ['home','fabric','tgt','gallery'].forEach(x=>document.getElementById('page-'+x).classList.toggle('hidden', x!==p));
+  ['home','fabric','tgt'].forEach(x=>document.getElementById('page-'+x).classList.toggle('hidden', x!==p));
   window.scrollTo(0,0);
-  if(p==='gallery'){GF=null;renderGalleryPage();}
+  if(p==='fabric') setTopTab(TOP);
+}
+function setTopTab(t){
+  TOP=t;
+  document.getElementById('tab-fabric').classList.toggle('hidden', t!=='fabric');
+  document.getElementById('tab-gallery').classList.toggle('hidden', t!=='gallery');
+  document.getElementById('ttFabric').classList.toggle('active', t==='fabric');
+  document.getElementById('ttGallery').classList.toggle('active', t==='gallery');
+  if(t==='gallery'){GF=null;renderGalleryPage();}
 }
 function initHome(){
-  document.getElementById('hcFabric').textContent = FABRICS.length.toLocaleString()+' 塊布料';
+  document.getElementById('hcFabric').textContent = FABRICS.length.toLocaleString()+' 塊布料 · '+GALLERY.length+' 張織紋圖';
   document.getElementById('hcTgt').textContent = '即時連線 Airtable';
-  document.getElementById('hcGallery').textContent = GALLERY.length+' 張織紋圖 · '+new Set(GALLERY.map(g=>g.fabrication)).size+' 個布種';
+  document.getElementById('ttFabricN').textContent = FABRICS.length.toLocaleString();
+  document.getElementById('ttGalleryN').textContent = GALLERY.length;
 }
 
 /* ---------- 以布種找織紋頁 ---------- */
-let GF=null; // null = 還在布種選單;選了某布種 = 該名稱
+let GF=null;    // null = 布種選單;選了某布種 = 該名稱
+let GQ='';      // 搜尋字串(只在第一階用)
 function renderGalleryPage(){
   const counts={};
   GALLERY.forEach(g=>counts[g.fabrication]=(counts[g.fabrication]||0)+1);
   const fabs=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
 
   if(GF===null){
-    // 第一階:布種大入口
+    // 第一階:布種大入口 + 搜尋框
+    const q=GQ.toLowerCase().trim();
+    const filtered = q ? fabs.filter(([f])=>f.toLowerCase().includes(q)) : fabs;
     document.getElementById('gNote').innerHTML=`目前已收圖 <b>${GALLERY.length}</b> 張,涵蓋 <b>${fabs.length}</b> 個布種。點布種看該類所有織紋。`;
-    document.getElementById('gFabs').innerHTML='';
-    document.getElementById('gEmpty').classList.add('hidden');
+    document.getElementById('gSearchBox').innerHTML=
+      `<div class="gsearch">
+         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+         <input id="gqInput" type="text" placeholder="搜尋布種(輸入 jersey、rib、twill…)" value="${GQ.replace(/"/g,'&quot;')}">
+         ${GQ?`<span class="gqclear" onclick="setGQ('')">×</span>`:''}
+       </div>`;
+    const inp=document.getElementById('gqInput');
+    inp.oninput=e=>setGQ(e.target.value);
+    // 維持輸入焦點(每次 render 後重設游標到尾端)
+    inp.focus(); inp.setSelectionRange(GQ.length, GQ.length);
+    document.getElementById('gEmpty').classList.toggle('hidden', filtered.length>0);
+    document.getElementById('gEmpty').textContent='沒有符合的布種';
     document.getElementById('gGrid').className='gentries';
-    document.getElementById('gGrid').innerHTML=fabs.map(([f,n])=>{
-      // 取該布種第一張當代表縮圖
+    document.getElementById('gGrid').innerHTML=filtered.map(([f,n])=>{
       const rep=GALLERY.find(g=>g.fabrication===f);
       return `<div class="gentry" onclick="pickFab('${f.replace(/'/g,"\\'")}')">
         <div class="gimg"><img src="${rep.image}" alt=""></div>
@@ -117608,23 +120529,27 @@ function renderGalleryPage(){
 
   // 第二階:選定布種後的網格
   document.getElementById('gNote').innerHTML=`<span class="gback" onclick="pickFab(null)">← 換布種</span> · <b>${GF}</b> · ${GALLERY.filter(g=>g.fabrication===GF).length} 張`;
-  document.getElementById('gFabs').innerHTML='';
+  document.getElementById('gSearchBox').innerHTML='';
   const list=GALLERY.filter(g=>g.fabrication===GF);
   document.getElementById('gEmpty').classList.toggle('hidden',list.length>0);
+  document.getElementById('gEmpty').textContent='這個布種目前還沒收圖';
   document.getElementById('gGrid').className='ggrid';
   document.getElementById('gGrid').innerHTML=list.map(g=>{
     const fi=FABRICS.findIndex(f=>f.code===g.code);
     const brands=(g.brands||[]).join(', ');
+    const sw=[g.scanSW,g.testSW].filter(Boolean).join(' · ');
     return `<div class="gcard" onclick="openModal(${fi})">
       <div class="gimg"><img src="${g.image}" alt=""></div>
       <div class="ginfo">
         <div class="gtop"><b>${g.code}</b> · <b>${brands||'—'}</b></div>
         <div class="ggsm">${g.gsm||'—'} gsm</div>
         <div class="gcomp">${g.composition||'—'}</div>
+        ${sw?`<div class="gsw">${sw}</div>`:''}
       </div>
     </div>`;}).join('');
 }
-function pickFab(f){GF=f;renderGalleryPage();}
+function pickFab(f){GF=f;GQ='';renderGalleryPage();}
+function setGQ(v){GQ=v;renderGalleryPage();}
 
 /* ---------- TGT 驗證頁 ---------- */
 const TF={status:'',brand:'',season:'',usage:'',q:''};
